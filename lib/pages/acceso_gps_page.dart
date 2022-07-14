@@ -38,7 +38,7 @@ class _AccesoGpsPageState extends State<AccesoGpsPage>
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Es necesario el GPS para usar esta app'),
+          Text('Es necesario el permiso de ubicación para esta app'),
           MaterialButton(
               child: Text('Solicitar Acceso',
                   style: TextStyle(color: Colors.white)),

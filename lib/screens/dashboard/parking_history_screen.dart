@@ -45,7 +45,7 @@ class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: Dimensions.heightSize ,
+                  height: Dimensions.heightSize,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -55,11 +55,11 @@ class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
                     ' Para ver los detalles del servicio presiona sobre la imagen del parqueo',
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: Dimensions.largeTextSize ),
+                        fontSize: Dimensions.largeTextSize),
                   ),
                 ),
                 SizedBox(
-                  height: Dimensions.heightSize ,
+                  height: Dimensions.heightSize,
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height,
@@ -162,7 +162,7 @@ class _ParkingHistoryScreenState extends State<ParkingHistoryScreen> {
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(
                                                       Dimensions.radius *
-                                                          1))), //0.5
+                                                          2))), //0.5
                                           child: Center(
                                               child: Text(valor
                                                   ? 'Solamente guiado'

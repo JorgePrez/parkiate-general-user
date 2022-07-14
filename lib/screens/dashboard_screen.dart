@@ -33,10 +33,6 @@ import 'package:parkline/pages/map_markers.dart';
 import 'package:provider/provider.dart';
 import 'package:parkline/widgets/color_button.dart';
 
-
-
-
-
 String selectedVehicle = 'assets/images/vehicle/filter.png';
 String selectedVehicle2;
 
@@ -60,15 +56,7 @@ bool c = false;
 
 bool d = false;
 
-  RangeValues rangeValues = const RangeValues(0, 40);
-
-
-
-
-
-
-
-
+RangeValues rangeValues = const RangeValues(0, 40);
 
 class DashboardScreen extends StatefulWidget {
   final String id,
@@ -105,7 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   SharedPref _sharedPref = new SharedPref();
 
- /* @override
+  /* @override
   void initState() {
     if (widget.tipo_auto == 'V') {
       selectedVehicle2 = vehiculo;
@@ -139,10 +127,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final ServiciosadminProvider serviciosProvider =
         new ServiciosadminProvider();
 
-
-      final parqueosService = Provider.of<ParqueosService>(context);
-       //Agregando psuedo estado
-
+    final parqueosService = Provider.of<ParqueosService>(context);
+    //Agregando psuedo estado
 
     return SafeArea(
       child: Scaffold(
@@ -155,6 +141,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: profileWidget(context),
                   decoration: BoxDecoration(
                     color: CustomColor.primaryColor,
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    "Parqueo Actual",
+                    style: CustomStyle.listStyle,
+                  ),
+                  trailing: Icon(Icons.local_parking_sharp),
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Filter()));
+
+                    /*
+                    Navigator.of(context).pop();*/
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: Dimensions.marginSize,
+                      right: Dimensions.marginSize),
+                  child: Divider(
+                    color: Colors.black.withOpacity(0.4),
                   ),
                 ),
                 ListTile(
@@ -216,7 +224,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Mi Vehículo',
+                    'Mis Vehículos',
                     style: CustomStyle.listStyle,
                   ),
                   trailing: Icon(Icons.airport_shuttle_outlined),
@@ -241,29 +249,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),
-
-
-                 ListTile(
+                ListTile(
                   title: Text(
-                    'Mis direcciones',
+                    "Reservas actuales",
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.add_location_outlined),
-                  onTap: () async {
+                  trailing: Icon(Icons.qr_code_2_outlined),
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Filter()));
 
-            UsuarioProvider usuarioProvider = new UsuarioProvider();
-
-                   
-                   
-                   
-                    List<Direccion> lista = await usuarioProvider.getDirections(widget.id);
-
-                    print(lista);
-
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            DirectionHistoryScreen(listaservicios: lista, id_usuario: widget.id)));
+                    /*
+                    Navigator.of(context).pop();*/
                   },
                 ),
                 Padding(
@@ -274,21 +271,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),
-              
-
-
-
                 ListTile(
                   title: Text(
-                    "Regresar a Dashboard",
+                    'Direcciones guardadas',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.person_search_outlined),
+                  trailing: Icon(Icons.add_location_outlined),
+                  onTap: () async {
+                    UsuarioProvider usuarioProvider = new UsuarioProvider();
+
+                    List<Direccion> lista =
+                        await usuarioProvider.getDirections(widget.id);
+
+                    print(lista);
+
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => DirectionHistoryScreen(
+                            listaservicios: lista, id_usuario: widget.id)));
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: Dimensions.marginSize,
+                      right: Dimensions.marginSize),
+                  child: Divider(
+                    color: Colors.black.withOpacity(0.4),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    "Regresar a Mapa",
+                    style: CustomStyle.listStyle,
+                  ),
+                  trailing: Icon(Icons.map_outlined),
                   onTap: () {
-
-                             Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Filter()));
-
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Filter()));
 
                     /*
                     Navigator.of(context).pop();*/
@@ -337,20 +356,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   //TODO: aqui debe estar el verdadero mapa, no importa dad
-                /*   child: MapaPageCopy(
+                  /*   child: MapaPageCopy(
                    )*/
 
-
-                       
                   child: MapMarkers(
-                      idusuario: widget.id,
-                      nombreusuario: widget.nombre,
-                      telefono: widget.telefono,
-                      modelo_auto: widget.modelo_auto,
-                      placa_auto: widget.placa_auto,
-                      imagen_usuario: widget.imagen,
-),
-                   
+                    idusuario: widget.id,
+                    nombreusuario: widget.nombre,
+                    telefono: widget.telefono,
+                    modelo_auto: widget.modelo_auto,
+                    placa_auto: widget.placa_auto,
+                    imagen_usuario: widget.imagen,
+                  ),
+
                   /*child: MapMarkers(
                       idusuario: widget.id,
                       nombreusuario: widget.nombre,
@@ -360,7 +377,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       imagen_usuario: widget.imagen),*/
                 ),
                 DraggableScrollableSheet(
-
                   builder: (context, scrollController) {
                     return Container(
                       decoration: BoxDecoration(
@@ -448,7 +464,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           //TODO: titulin
           /*Text('Bienvenido ${widget?.nombre ?? ''}!!!',
               style: CustomStyle.textStyle),
@@ -511,13 +526,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Image.asset(selectedVehicle),
                   ),
                   onTap: () {
-                     showVehicleBottomSheet(context);
+                    showVehicleBottomSheet(context);
                   },
                 ),
               )
             ],
           ),
-          
+
           //TODO:QUITANDO ESPACIOS
           SizedBox(
             height: Dimensions.heightSize,
@@ -552,171 +567,117 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onTap: () async {
               String keyword = searchController.text.trim();
               listaconcidencias = await parqueosProvider.buscar(keyword);
-            List<Parqueo> listaconcidenciasfiltradas = [];
+              List<Parqueo> listaconcidenciasfiltradas = [];
 
+              List<Parqueo> resultfiltrados = [];
 
-                        List<Parqueo> resultfiltrados = [];
+              print(keyword);
 
+              String caracteristicasObjetivo = "";
 
-                print(keyword);
+              if (uno == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "1 ";
+              }
 
+              if (dos == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "2 ";
+              }
 
-                String caracteristicasObjetivo = "";
+              if (tres == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "3 ";
+              }
 
+              if (cuatro == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "4 ";
+              }
 
-                if(uno == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"1 ";
+              if (cinco == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "5 ";
+              }
 
-                }
+              if (seis == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "6 ";
+              }
 
-                
-                if(dos == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"2 ";
+              if (siete == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "7 ";
+              }
 
-                }
+              if (ocho == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "8 ";
+              }
 
+              if (nueve == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "9 ";
+              }
 
-                   if(tres == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"3 ";
+              if (a == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "A ";
+              }
 
-                }
+              if (b == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "B ";
+              }
 
-                    if(cuatro == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"4 ";
+              if (c == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "C ";
+              }
 
-                }
-
-
-                
-                    if(cinco == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"5 ";
-
-                }
-
-
-                          if(seis == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"6 ";
-
-                }
-
-                          if(siete == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"7 ";
-
-                }
-
-                          if(ocho == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"8 ";
-
-                }
-
-                          if(nueve == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"9 ";
-
-                }
-
-                          if(a == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"A ";
-
-                }
-
-                          if(b == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"B ";
-
-                }
-
-                          if(c == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"C ";
-
-                }
-
-                          if(d == true){
-                  caracteristicasObjetivo = caracteristicasObjetivo+"D ";
-
-                }
-
+              if (d == true) {
+                caracteristicasObjetivo = caracteristicasObjetivo + "D ";
+              }
 
               //  print(caracteristicasObjetivo);
 
+              List<String> porfiltrar = caracteristicasObjetivo.split(" ");
 
-                List<String> porfiltrar = caracteristicasObjetivo.split(" ");
+              for (int i = 0; i < listaconcidencias.length; i++) {
+                Parqueo actual = listaconcidencias[i];
 
+                int contador = 0;
 
-                for(int i=0; i<listaconcidencias.length;i++){
+                String caracteristicas_parqueo = actual.detalles;
 
-                  Parqueo actual = listaconcidencias[i];
-
-                  int contador= 0;
-
-                  String caracteristicas_parqueo =  actual.detalles;
-
-                      for(int i=0; i<porfiltrar.length;i++){
-
-                        if(caracteristicas_parqueo.contains(porfiltrar[i])){
-
-                         contador++;
-
-                        }
-
-                        
-
-
-                              }
-
-
-                   if(contador==porfiltrar.length){
-                     listaconcidenciasfiltradas.add(actual);
-                   }
-
-
+                for (int i = 0; i < porfiltrar.length; i++) {
+                  if (caracteristicas_parqueo.contains(porfiltrar[i])) {
+                    contador++;
+                  }
                 }
 
-               for(int i=0; i<listaconcidenciasfiltradas.length;i++){
+                if (contador == porfiltrar.length) {
+                  listaconcidenciasfiltradas.add(actual);
+                }
+              }
 
+              for (int i = 0; i < listaconcidenciasfiltradas.length; i++) {
                 Parqueo actual = listaconcidenciasfiltradas[i];
 
+                if (rangeValues.start <= double.parse(actual.hora) &&
+                    double.parse(actual.hora) <= rangeValues.end) {
+                  resultfiltrados.add(actual);
+                }
+              }
 
-                 if(  rangeValues.start <= double.parse(actual.hora) && double.parse(actual.hora) <= rangeValues.end  ){
-                   resultfiltrados.add(actual);
-                 }
+              // print(resultfiltrados);
 
-               }
+              User user = User.fromJson(await _sharedPref.read('user') ?? {});
 
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => DashboardScreenFilter(
+                        id: user.id,
+                        email: user.email,
+                        nombre: user.nombre,
+                        telefono: user.telefono,
+                        imagen: user.imagen,
+                        session_token: user.sessionToken,
+                        modelo_auto: user.modeloAuto,
+                        placa_auto: user.placaAuto,
+                        imagen_auto: user.imagenAuto,
+                        tipo_auto: user.tipoAuto,
+                        listaconcidencias: resultfiltrados,
+                      )));
 
-
-
-                 
-              
-                      // print(resultfiltrados);
-
-
-              
-                      User user = User.fromJson(
-                      await _sharedPref.read('user') ?? {});
-
-        
-                                   Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashboardScreenFilter(
-                                                  id: user.id,
-                                                  email: user.email,
-                                                  nombre: user.nombre,
-                                                  telefono: user.telefono,
-                                                  imagen: user.imagen,
-                                                  session_token:
-                                                      user.sessionToken,
-                                                  modelo_auto: user.modeloAuto,
-                                                  placa_auto: user.placaAuto,
-                                                  imagen_auto: user.imagenAuto,
-                                                  tipo_auto: user.tipoAuto,
-                                                  listaconcidencias: resultfiltrados,
-
-                                                )
-                                                )
-                                                );
-              
-                 
-                 /*
+              /*
 
               setState(() {
                 isConfirm = !isConfirm;
@@ -751,27 +712,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     GestureDetector(
                       child: Icon(Icons.arrow_back),
                       onTap: () async {
+                        User user =
+                            User.fromJson(await _sharedPref.read('user') ?? {});
 
-                          User user = User.fromJson(
-                      await _sharedPref.read('user') ?? {});
-
-        
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashboardScreen(
-                                                  id: user.id,
-                                                  email: user.email,
-                                                  nombre: user.nombre,
-                                                  telefono: user.telefono,
-                                                  imagen: user.imagen,
-                                                  session_token:
-                                                      user.sessionToken,
-                                                  modelo_auto: user.modeloAuto,
-                                                  placa_auto: user.placaAuto,
-                                                  imagen_auto: user.imagenAuto,
-                                                  tipo_auto: user.tipoAuto,
-                                                )));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => DashboardScreen(
+                                  id: user.id,
+                                  email: user.email,
+                                  nombre: user.nombre,
+                                  telefono: user.telefono,
+                                  imagen: user.imagen,
+                                  session_token: user.sessionToken,
+                                  modelo_auto: user.modeloAuto,
+                                  placa_auto: user.placaAuto,
+                                  imagen_auto: user.imagenAuto,
+                                  tipo_auto: user.tipoAuto,
+                                )));
                         /*setState(() {
                           isConfirm = !isConfirm;
                           print(isConfirm.toString());
@@ -811,7 +767,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   var longlatitud = double.parse(parkingPoint.latitude);
                   var longlongitud = double.parse(parkingPoint.longitude);
                   var arr = parkingPoint.detalles.split(' ');
-            
 
                   return Padding(
                     padding:
@@ -955,9 +910,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-
 //Filter widget modal /////////////////////////////////////////
-
 
 class Filter extends StatefulWidget {
   const Filter({Key key}) : super(key: key);
@@ -965,7 +918,6 @@ class Filter extends StatefulWidget {
   @override
   _FilterState createState() => _FilterState();
 }
-
 
 class _FilterState extends State<Filter> {
   int timeIndex = 0;
@@ -975,169 +927,135 @@ class _FilterState extends State<Filter> {
 
   @override
   Widget build(BuildContext context) {
-
-     
-      return Container(
-        padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.85,
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(20)),
-        child: Stack(
-          children: [
-
-             
-
-            ListView(
-              padding: const EdgeInsets.only(bottom: 60),
-              children: [
-
-            
-                 Row(
-                   children: [
-                     GestureDetector(
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: CustomColor.primaryColor,
-                        ),
-                        onTap: () {
-
-                          uno = false;
-                          dos = false;
-                         tres = false;
-                        cuatro = false;
-                        cinco = false;
-                         seis = false;
-                        siete = false;
-                        ocho = false;
-                        nueve = false;
-                        a = false;
-                        b = false;
-                         c = false;
-                        d = false;
-
-  rangeValues = const RangeValues(0, 40);
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                   ],
-                 ),
-
-
-               
-
-
-                 const SizedBox(
-                  height: 10,
-                ),
-
-                    Center(
-                      child: Text(
-            'Búsqueda por filtros',
-            style: TextStyle(
-              fontSize: Dimensions.extraLargeTextSize * 1,
-            ),
-          ),
+    return Container(
+      padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.85,
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(20)),
+      child: Stack(
+        children: [
+          ListView(
+            padding: const EdgeInsets.only(bottom: 60),
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: CustomColor.primaryColor,
                     ),
+                    onTap: () {
+                      uno = false;
+                      dos = false;
+                      tres = false;
+                      cuatro = false;
+                      cinco = false;
+                      seis = false;
+                      siete = false;
+                      ocho = false;
+                      nueve = false;
+                      a = false;
+                      b = false;
+                      c = false;
+                      d = false;
 
-            const SizedBox(
-                  height: 10,
+                      rangeValues = const RangeValues(0, 40);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: Text(
+                  'Búsqueda por filtros',
+                  style: TextStyle(
+                    fontSize: Dimensions.extraLargeTextSize * 1,
+                  ),
                 ),
-      
-         
-                Text(
-                  "Rango de precios(precio por hora)",
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontSize: Dimensions.largeTextSize,
-                      ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-      
-                RangeSlider(
-                    divisions: 40,
-                    labels: RangeLabels(
-                        'Q${rangeValues.start.toString()}',
-                        'Q${rangeValues.end.toString()}'),
-                    activeColor: CustomColor.primaryColor,
-                    min: 0,
-                    max: 40,
-                    values: rangeValues,
-                    onChanged: (value) {
-                      setState(() {
-                        print(rangeValues);
-                        rangeValues = value;
-                      });
-                    }),
-         
-                const SizedBox(
-                  height: 30,
-                ),
-                Text(
-                  'Caracteristicas del parqueo',
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontSize: Dimensions.largeTextSize,
-                      ),
-                ),
-                   const SizedBox(
-                  height: 10,
-                ),
-      
-                Wrap(
-                  children: [
-                    TextBox1("Baños"),
-                    TextBox2("Bajo techo"),
-                                        TextBox3("Asfalto"),
-                    TextBox4("Seguridad Privada"),
-                    TextBox5("Espacio para furgoneta o camión"),
-                    TextBox6("Lavado"),
-                    TextBox7("Iluminado"),
-                    TextBox8("Puerta de Seguridad"),
-                    TextBox9("Apto para discapacitados"),
-                    TextBoxA("Cámara de Seguridad"),
-                     TextBoxB("Amplio Espacio"),
-
-                    TextBoxC("Sótano"),
-                    TextBoxD("Pago con tarjeta"),
-
-
-
-
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-      
-             
-              ],
-            ),
-
-                PositionedDirectional(
-              bottom: 20,
-              start: 20,
-              end: 20,
-              child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const SizedBox(
-                      height: 55,
-                      child: ColorButton(
-                        'Aplicar filtros',
-                      ))),
-            ), 
-
-
-
-          ],
-        ),
-      );
-    
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                "Rango de precios(precio por hora)",
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontSize: Dimensions.largeTextSize,
+                    ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              RangeSlider(
+                  divisions: 40,
+                  labels: RangeLabels('Q${rangeValues.start.toString()}',
+                      'Q${rangeValues.end.toString()}'),
+                  activeColor: CustomColor.primaryColor,
+                  min: 0,
+                  max: 40,
+                  values: rangeValues,
+                  onChanged: (value) {
+                    setState(() {
+                      print(rangeValues);
+                      rangeValues = value;
+                    });
+                  }),
+              const SizedBox(
+                height: 30,
+              ),
+              Text(
+                'Caracteristicas del parqueo',
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontSize: Dimensions.largeTextSize,
+                    ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Wrap(
+                children: [
+                  TextBox1("Baños"),
+                  TextBox2("Bajo techo"),
+                  TextBox3("Asfalto"),
+                  TextBox4("Seguridad Privada"),
+                  TextBox5("Espacio para furgoneta o camión"),
+                  TextBox6("Lavado"),
+                  TextBox7("Iluminado"),
+                  TextBox8("Puerta de Seguridad"),
+                  TextBox9("Apto para discapacitados"),
+                  TextBoxA("Cámara de Seguridad"),
+                  TextBoxB("Amplio Espacio"),
+                  TextBoxC("Sótano"),
+                  TextBoxD("Pago con tarjeta"),
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+          PositionedDirectional(
+            bottom: 20,
+            start: 20,
+            end: 20,
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const SizedBox(
+                    height: 55,
+                    child: ColorButton(
+                      'Aplicar filtros',
+                    ))),
+          ),
+        ],
+      ),
+    );
   }
 }
-
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -1155,10 +1073,8 @@ class _TextBox1State extends State<TextBox1> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           uno = !uno;
 
-       
           //uno=isSelected;
         });
       },
@@ -1171,13 +1087,13 @@ class _TextBox1State extends State<TextBox1> {
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: uno ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: uno ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
 
 class TextBox2 extends StatefulWidget {
   final String title;
@@ -1193,10 +1109,8 @@ class _TextBox2State extends State<TextBox2> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           dos = !dos;
 
-       
           //uno=isSelected;
         });
       },
@@ -1209,14 +1123,13 @@ class _TextBox2State extends State<TextBox2> {
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: dos ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: dos ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
-
 
 class TextBox3 extends StatefulWidget {
   final String title;
@@ -1232,10 +1145,8 @@ class _TextBox3State extends State<TextBox3> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           tres = !tres;
 
-       
           //uno=isSelected;
         });
       },
@@ -1248,14 +1159,13 @@ class _TextBox3State extends State<TextBox3> {
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: tres ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: tres ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
-
 
 class TextBox4 extends StatefulWidget {
   final String title;
@@ -1271,10 +1181,8 @@ class _TextBox4State extends State<TextBox4> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           cuatro = !cuatro;
 
-       
           //uno=isSelected;
         });
       },
@@ -1282,18 +1190,19 @@ class _TextBox4State extends State<TextBox4> {
         margin: const EdgeInsets.only(right: 7, top: 10),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
         decoration: BoxDecoration(
-            color: cuatro ? CustomColor.primaryColor : CustomColor.secondaryColor,
+            color:
+                cuatro ? CustomColor.primaryColor : CustomColor.secondaryColor,
             borderRadius: BorderRadius.circular(20)),
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: cuatro ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: cuatro ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
 
 class TextBox5 extends StatefulWidget {
   final String title;
@@ -1309,10 +1218,8 @@ class _TextBox5State extends State<TextBox5> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           cinco = !cinco;
 
-       
           //uno=isSelected;
         });
       },
@@ -1320,18 +1227,19 @@ class _TextBox5State extends State<TextBox5> {
         margin: const EdgeInsets.only(right: 7, top: 10),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         decoration: BoxDecoration(
-            color: cinco ? CustomColor.primaryColor : CustomColor.secondaryColor,
+            color:
+                cinco ? CustomColor.primaryColor : CustomColor.secondaryColor,
             borderRadius: BorderRadius.circular(20)),
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: cinco ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: cinco ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
 
 class TextBox6 extends StatefulWidget {
   final String title;
@@ -1347,10 +1255,8 @@ class _TextBox6State extends State<TextBox6> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           seis = !seis;
 
-       
           //uno=isSelected;
         });
       },
@@ -1363,13 +1269,13 @@ class _TextBox6State extends State<TextBox6> {
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: seis ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: seis ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
 
 class TextBox7 extends StatefulWidget {
   final String title;
@@ -1385,10 +1291,8 @@ class _TextBox7State extends State<TextBox7> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           siete = !siete;
 
-       
           //uno=isSelected;
         });
       },
@@ -1396,18 +1300,19 @@ class _TextBox7State extends State<TextBox7> {
         margin: const EdgeInsets.only(right: 7, top: 10),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         decoration: BoxDecoration(
-            color: siete ? CustomColor.primaryColor : CustomColor.secondaryColor,
+            color:
+                siete ? CustomColor.primaryColor : CustomColor.secondaryColor,
             borderRadius: BorderRadius.circular(20)),
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: siete ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: siete ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
 
 class TextBox8 extends StatefulWidget {
   final String title;
@@ -1417,17 +1322,14 @@ class TextBox8 extends StatefulWidget {
   _TextBox8State createState() => _TextBox8State();
 }
 
-
 class _TextBox8State extends State<TextBox8> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           ocho = !ocho;
 
-       
           //uno=isSelected;
         });
       },
@@ -1440,13 +1342,13 @@ class _TextBox8State extends State<TextBox8> {
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: ocho ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: ocho ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
 
 class TextBox9 extends StatefulWidget {
   final String title;
@@ -1456,17 +1358,14 @@ class TextBox9 extends StatefulWidget {
   _TextBox9State createState() => _TextBox9State();
 }
 
-
 class _TextBox9State extends State<TextBox9> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           nueve = !nueve;
 
-       
           //uno=isSelected;
         });
       },
@@ -1474,12 +1373,14 @@ class _TextBox9State extends State<TextBox9> {
         margin: const EdgeInsets.only(right: 7, top: 10),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         decoration: BoxDecoration(
-            color: nueve ? CustomColor.primaryColor : CustomColor.secondaryColor,
+            color:
+                nueve ? CustomColor.primaryColor : CustomColor.secondaryColor,
             borderRadius: BorderRadius.circular(20)),
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: nueve ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: nueve ? Colors.white : Colors.black),
         ),
       ),
     );
@@ -1494,17 +1395,14 @@ class TextBoxA extends StatefulWidget {
   _TextBoxAState createState() => _TextBoxAState();
 }
 
-
 class _TextBoxAState extends State<TextBoxA> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           a = !a;
 
-       
           //uno=isSelected;
         });
       },
@@ -1517,13 +1415,13 @@ class _TextBoxAState extends State<TextBoxA> {
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: a ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: a ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
 
 class TextBoxB extends StatefulWidget {
   final String title;
@@ -1533,17 +1431,14 @@ class TextBoxB extends StatefulWidget {
   _TextBoxBState createState() => _TextBoxBState();
 }
 
-
 class _TextBoxBState extends State<TextBoxB> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           b = !b;
 
-       
           //uno=isSelected;
         });
       },
@@ -1556,13 +1451,13 @@ class _TextBoxBState extends State<TextBoxB> {
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: b ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: b ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
 
 class TextBoxC extends StatefulWidget {
   final String title;
@@ -1572,17 +1467,14 @@ class TextBoxC extends StatefulWidget {
   _TextBoxCState createState() => _TextBoxCState();
 }
 
-
 class _TextBoxCState extends State<TextBoxC> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           c = !c;
 
-       
           //uno=isSelected;
         });
       },
@@ -1595,14 +1487,13 @@ class _TextBoxCState extends State<TextBoxC> {
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: c ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: c ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
-
 
 class TextBoxD extends StatefulWidget {
   final String title;
@@ -1618,10 +1509,8 @@ class _TextBoxDState extends State<TextBoxD> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           d = !d;
 
-       
           //uno=isSelected;
         });
       },
@@ -1634,26 +1523,13 @@ class _TextBoxDState extends State<TextBoxD> {
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: d ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: d ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class TextBox extends StatefulWidget {
   final String title;
@@ -1670,10 +1546,9 @@ class _TextBoxState extends State<TextBox> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          
           uno = !uno;
 
-          isSelected=uno;
+          isSelected = uno;
           //uno=isSelected;
         });
       },
@@ -1681,18 +1556,17 @@ class _TextBoxState extends State<TextBox> {
         margin: const EdgeInsets.only(right: 7, top: 10),
         padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 5),
         decoration: BoxDecoration(
-            color: isSelected ? CustomColor.primaryColor : CustomColor.secondaryColor,
+            color: isSelected
+                ? CustomColor.primaryColor
+                : CustomColor.secondaryColor,
             borderRadius: BorderRadius.circular(20)),
         child: Text(
           widget.title,
           style: Theme.of(context).textTheme.bodyText1.copyWith(
-              fontSize: Dimensions.defaultTextSize, color: isSelected ? Colors.white : Colors.black),
+              fontSize: Dimensions.defaultTextSize,
+              color: isSelected ? Colors.white : Colors.black),
         ),
       ),
     );
   }
 }
-
-
-
-
