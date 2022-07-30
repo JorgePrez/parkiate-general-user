@@ -161,195 +161,12 @@ class _MapMarkersSearchState extends State<MapMarkersSearch> {
       var longlongitud = double.parse(parkingPoint.longitude);
       var arr = parkingPoint.detalles.split(' ');
 
-      List<String> arrfake = [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-        'A',
-        'B',
-        'C',
-        'D'
-      ];
-
       //  print("el arreglo es $arr");
 
-      var det1;
-      var det2;
-      var det3;
-      var det4;
-
-      // String identificador = index;
-/*
-        if (arr[0] == '1') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-        } else if (arr[0] == '2') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-        } else if (arr[0] == '3') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-        } else if (arr[0] == '4') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-        } else if (arr[0] == '5') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-        } else if (arr[0] == '6') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-        } else if (arr[0] == '7') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-        } else if (arr[0] == '8') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-        } else if (arr[0] == '9') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-        } else if (arr[0] == 'A') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-        } else if (arr[0] == 'B') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-        } else if (arr[0] == 'C') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-        } else {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-        }
-
-        if (arr[1] == '1') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-        } else if (arr[1] == '2') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-        } else if (arr[1] == '3') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-        } else if (arr[1] == '4') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-        } else if (arr[1] == '5') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-        } else if (arr[1] == '6') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-        } else if (arr[1] == '7') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-        } else if (arr[1] == '8') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-        } else if (arr[1] == '9') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-        } else if (arr[1] == 'A') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-        } else if (arr[1] == 'B') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-        } else if (arr[1] == 'C') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-        } else {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-        }
-
-        if (arr[2] == '1') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-        } else if (arr[2] == '2') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-        } else if (arr[2] == '3') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-        } else if (arr[2] == '4') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-        } else if (arr[2] == '5') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-        } else if (arr[2] == '6') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-        } else if (arr[2] == '7') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-        } else if (arr[2] == '8') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-        } else if (arr[2] == '9') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-        } else if (arr[2] == 'A') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-        } else if (arr[2] == 'B') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-        } else if (arr[2] == 'C') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-        } else {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-        }
-
-        if (arr[3] == '1') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-        } else if (arr[3] == '2') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-        } else if (arr[3] == '3') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-        } else if (arr[3] == '4') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-        } else if (arr[3] == '5') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-        } else if (arr[3] == '6') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-        } else if (arr[3] == '7') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-        } else if (arr[3] == '8') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-        } else if (arr[3] == '9') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-        } else if (arr[3] == 'A') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-        } else if (arr[3] == 'B') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-        } else if (arr[3] == 'C') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-        } else {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-        }*/
+      var det1 = '';
+      var det2 = '';
+      var det3 = '';
+      var det4 = '';
 
       markers.add(Marker(
         markerId: MarkerId(parkingPoint.idParqueo),
@@ -364,18 +181,7 @@ class _MapMarkersSearchState extends State<MapMarkersSearch> {
 
         onTap: () async {
           List<Resenia> listar =
-              await reseniasProvider.reviewsbyPark(parkingPoint.idParqueo);
-
-          ResponseApi responseApiespacios =
-              await parqueosProvider.getslots(parkingPoint.idParqueo);
-
-          Espacios espacios = Espacios.fromJson(responseApiespacios.data);
-
-          String ocupados = espacios.espaciosOcupados;
-          int espaciodisponibles =
-              int.parse(parkingPoint.capacidadMaxima) - int.parse(ocupados);
-
-          String espacioslibres = espaciodisponibles.toString();
+              await reseniasProvider.reviewsbyPark2(parkingPoint.idParqueo);
 
           print('Infor window tap');
           Navigator.of(context).push(MaterialPageRoute(
@@ -386,7 +192,7 @@ class _MapMarkersSearchState extends State<MapMarkersSearch> {
                   amount: parkingPoint.capacidadMaxima,
                   image: parkingPoint.imagenes,
                   address: parkingPoint.direccion,
-                  slots: espacioslibres,
+                  slots: parkingPoint.capacidadMaxima,
                   mediahora: parkingPoint.mediaHora,
                   hora: parkingPoint.hora,
                   dia: parkingPoint.dia,

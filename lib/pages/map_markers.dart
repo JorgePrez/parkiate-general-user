@@ -360,18 +360,7 @@ class _MapMarkersState extends State<MapMarkers> {
 
         onTap: () async {
           List<Resenia> listar =
-              await reseniasProvider.reviewsbyPark(parkingPoint.idParqueo);
-
-          ResponseApi responseApiespacios =
-              await parqueosProvider.getslots(parkingPoint.idParqueo);
-
-          Espacios espacios = Espacios.fromJson(responseApiespacios.data);
-
-          String ocupados = espacios.espaciosOcupados;
-          int espaciodisponibles =
-              int.parse(parkingPoint.capacidad) - int.parse(ocupados);
-
-          String espacioslibres = espaciodisponibles.toString();
+              await reseniasProvider.reviewsbyPark2(parkingPoint.idParqueo);
 
           print('Infor window tap');
           Navigator.of(context).push(MaterialPageRoute(
@@ -382,7 +371,7 @@ class _MapMarkersState extends State<MapMarkers> {
                   amount: parkingPoint.capacidad,
                   image: parkingPoint.imagenes,
                   address: parkingPoint.direccion,
-                  slots: espacioslibres,
+                  slots: parkingPoint.capacidad,
                   mediahora: parkingPoint.mediaHora,
                   hora: parkingPoint.hora,
                   dia: parkingPoint.dia,

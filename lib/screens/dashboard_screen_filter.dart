@@ -659,24 +659,9 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                       ),
                       onTap: () async {
                         List<Resenia> listar = await reseniasProvider
-                            .reviewsbyPark(parkingPoint.idParqueo);
+                            .reviewsbyPark2(parkingPoint.idParqueo);
 
                         //Obtener cantidad de espacios disponbiles
-
-                        ResponseApi responseApiespacios = await parqueosProvider
-                            .getslots(parkingPoint.idParqueo);
-
-                        Espacios espacios =
-                            Espacios.fromJson(responseApiespacios.data);
-
-                        String ocupados = espacios.espaciosOcupados;
-                        int espaciodisponibles =
-                            int.parse(parkingPoint.capacidadMaxima) -
-                                int.parse(ocupados);
-
-                        String espacioslibres = espaciodisponibles.toString();
-
-                        print('ESPACIOS: ${espacioslibres}');
 
                         // print(listar);
 
@@ -688,7 +673,7 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                                 amount: parkingPoint.capacidadMaxima,
                                 image: parkingPoint.imagenes,
                                 address: parkingPoint.direccion,
-                                slots: espacioslibres,
+                                slots: parkingPoint.capacidadMaxima,
                                 mediahora: parkingPoint.mediaHora,
                                 hora: parkingPoint.hora,
                                 dia: parkingPoint.dia,

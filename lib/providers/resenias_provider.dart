@@ -10,6 +10,8 @@ class ReseniasProvider {
 
   String _api = '/api/resenias';
 
+  String _api2 = '/api/resenias_app';
+
   BuildContext context;
 
   Future init(BuildContext context) {
@@ -38,6 +40,29 @@ class ReseniasProvider {
   Future<List<Resenia>> reviewsbyPark(String id_parqueo) async {
     try {
       Uri url = Uri.http(_url, '$_api/getresenias');
+
+      String bodyParams = json.encode({
+        'id_parqueo': id_parqueo,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      print(data);
+
+      Resenia resenia = Resenia.fromJsonList(data);
+      print(resenia.toList);
+      return resenia.toList;
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
+
+  Future<List<Resenia>> reviewsbyPark2(String id_parqueo) async {
+    try {
+      Uri url = Uri.http(_url, '$_api2/getfullreviews');
 
       String bodyParams = json.encode({
         'id_parqueo': id_parqueo,
