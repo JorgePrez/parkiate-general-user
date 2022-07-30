@@ -30,9 +30,6 @@ import 'package:parkline/screens/onboard/on_board_screen.dart';
 import 'package:parkline/pages/map_markers.dart';
 import 'package:provider/provider.dart';
 
-
-
-
 String selectedVehicle = 'assets/images/vehicle/tourism.png';
 String selectedVehicle2;
 
@@ -53,24 +50,22 @@ class DashboardScreenFilter extends StatefulWidget {
       imagen_auto,
       tipo_auto;
 
+  List<Parqueo> listaconcidencias;
 
-        List<Parqueo> listaconcidencias ;
-
-
-  DashboardScreenFilter({
-    Key key,
-    this.id,
-    this.email,
-    this.nombre,
-    this.telefono,
-    this.imagen,
-    this.session_token,
-    this.modelo_auto,
-    this.placa_auto,
-    this.imagen_auto,
-    this.tipo_auto,
-    this.listaconcidencias
-  }) : super(key: key);
+  DashboardScreenFilter(
+      {Key key,
+      this.id,
+      this.email,
+      this.nombre,
+      this.telefono,
+      this.imagen,
+      this.session_token,
+      this.modelo_auto,
+      this.placa_auto,
+      this.imagen_auto,
+      this.tipo_auto,
+      this.listaconcidencias})
+      : super(key: key);
 
   @override
   _DashboardScreenFilterState createState() => _DashboardScreenFilterState();
@@ -83,9 +78,7 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
 
   @override
   void initState() {
-
-      listaconcidencias = widget.listaconcidencias;
-
+    listaconcidencias = widget.listaconcidencias;
 
     if (widget.tipo_auto == 'V') {
       selectedVehicle2 = vehiculo;
@@ -119,10 +112,8 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
     final ServiciosadminProvider serviciosProvider =
         new ServiciosadminProvider();
 
-
-      final parqueosService = Provider.of<ParqueosService>(context);
-       //Agregando psuedo estado
-
+    final parqueosService = Provider.of<ParqueosService>(context);
+    //Agregando psuedo estado
 
     return SafeArea(
       child: Scaffold(
@@ -221,29 +212,24 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),
-
-
-                 ListTile(
+                ListTile(
                   title: Text(
                     'Mis direcciones',
                     style: CustomStyle.listStyle,
                   ),
                   trailing: Icon(Icons.add_location_outlined),
                   onTap: () async {
+                    UsuarioProvider usuarioProvider = new UsuarioProvider();
 
-            UsuarioProvider usuarioProvider = new UsuarioProvider();
-
-                   
-                   
-                   
-                    List<Direccion> lista = await usuarioProvider.getDirections(widget.id);
+                    List<Direccion> lista =
+                        await usuarioProvider.getDirections(widget.id);
 
                     print(lista);
 
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            DirectionHistoryScreen(listaservicios: lista, id_usuario: widget.id)));
+                        builder: (context) => DirectionHistoryScreen(
+                            listaservicios: lista, id_usuario: widget.id)));
                   },
                 ),
                 Padding(
@@ -254,10 +240,6 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),
-              
-
-
-
                 ListTile(
                   title: Text(
                     "Regresar a Dashboard",
@@ -311,11 +293,9 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   //TODO: aqui debe estar el verdadero mapa, no importa dad
-                /*   child: MapaPageCopy(
+                  /*   child: MapaPageCopy(
                    )*/
 
-
-                       
                   child: MapMarkersSearch(
                       idusuario: widget.id,
                       nombreusuario: widget.nombre,
@@ -323,9 +303,8 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                       modelo_auto: widget.modelo_auto,
                       placa_auto: widget.placa_auto,
                       imagen_usuario: widget.imagen,
-                      listadito: listaconcidencias
-),
-                   
+                      listadito: listaconcidencias),
+
                   /*child: MapMarkers(
                       idusuario: widget.id,
                       nombreusuario: widget.nombre,
@@ -335,7 +314,6 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                       imagen_usuario: widget.imagen),*/
                 ),
                 DraggableScrollableSheet(
-
                   builder: (context, scrollController) {
                     return Container(
                       decoration: BoxDecoration(
@@ -352,8 +330,7 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                       ),
                     );
                   },
-    
-                    initialChildSize: 0.25,
+                  initialChildSize: 0.25,
                   minChildSize: 0.25,
                   maxChildSize: 1.0,
                 ),
@@ -424,7 +401,6 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           //TODO: titulin
           /*Text('Bienvenido ${widget?.nombre ?? ''}!!!',
               style: CustomStyle.textStyle),
@@ -487,13 +463,13 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                     child: Image.asset(selectedVehicle),
                   ),
                   onTap: () {
-                     showVehicleBottomSheet(context);
+                    showVehicleBottomSheet(context);
                   },
                 ),
               )
             ],
           ),
-          
+
           //TODO:QUITANDO ESPACIOS
           SizedBox(
             height: Dimensions.heightSize,
@@ -564,30 +540,26 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                       child: Icon(Icons.arrow_back),
                       onTap: () {
                         setState(() async {
-                         /* isConfirm = !isConfirm;
+                          /* isConfirm = !isConfirm;
                           print(isConfirm.toString());*/
 
-                       User user = User.fromJson(
-                      await _sharedPref.read('user') ?? {});
+                          User user = User.fromJson(
+                              await _sharedPref.read('user') ?? {});
 
-        
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashboardScreen(
-                                                  id: user.id,
-                                                  email: user.email,
-                                                  nombre: user.nombre,
-                                                  telefono: user.telefono,
-                                                  imagen: user.imagen,
-                                                  session_token:
-                                                      user.sessionToken,
-                                                  modelo_auto: user.modeloAuto,
-                                                  placa_auto: user.placaAuto,
-                                                  imagen_auto: user.imagenAuto,
-                                                  tipo_auto: user.tipoAuto,
-                                                )));
-
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => DashboardScreen(
+                                        id: user.id,
+                                        email: user.email,
+                                        nombre: user.nombre,
+                                        telefono: user.telefono,
+                                        imagen: user.imagen,
+                                        session_token: user.sessionToken,
+                                        modelo_auto: user.modeloAuto,
+                                        placa_auto: user.placaAuto,
+                                        imagen_auto: user.imagenAuto,
+                                        tipo_auto: user.tipoAuto,
+                                      )));
                         });
                       },
                     ),
@@ -624,7 +596,6 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                   var longlatitud = double.parse(parkingPoint.latitude);
                   var longlongitud = double.parse(parkingPoint.longitude);
                   var arr = parkingPoint.detalles.split(' ');
-            
 
                   return Padding(
                     padding:
@@ -727,6 +698,7 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                                 martesEntrada: parkingPoint.martesApertura,
                                 martesSalida: parkingPoint.martesCierre,
                                 detalles: arr,
+                                cantidad_detalles: arr.length,
                                 latitude: longlatitud,
                                 longitude: longlongitud,
                                 miercolesEntrada:

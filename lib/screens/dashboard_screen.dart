@@ -145,28 +145,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    "Parqueo Actual",
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.local_parking_sharp),
-                  onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Filter()));
-
-                    /*
-                    Navigator.of(context).pop();*/
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
                     'Historial de Parqueos',
                     style: CustomStyle.listStyle,
                   ),
@@ -224,7 +202,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Mis Vehículos',
+                    'Mi Vehículo',
                     style: CustomStyle.listStyle,
                   ),
                   trailing: Icon(Icons.airport_shuttle_outlined),
@@ -251,29 +229,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    "Reservas actuales",
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.qr_code_2_outlined),
-                  onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Filter()));
-
-                    /*
-                    Navigator.of(context).pop();*/
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Direcciones guardadas',
+                    'Mis direcciones',
                     style: CustomStyle.listStyle,
                   ),
                   trailing: Icon(Icons.add_location_outlined),
@@ -301,13 +257,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    "Regresar a Mapa",
+                    "Regresar a Dashboard",
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.map_outlined),
+                  trailing: Icon(Icons.person_search_outlined),
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Filter()));
+                    Navigator.of(context).pop();
+
+/*
+                             Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Filter()));
+
+                        */
 
                     /*
                     Navigator.of(context).pop();*/
@@ -869,6 +830,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 martesEntrada: parkingPoint.martesApertura,
                                 martesSalida: parkingPoint.martesCierre,
                                 detalles: arr,
+                                cantidad_detalles: arr.length,
                                 latitude: longlatitud,
                                 longitude: longlongitud,
                                 miercolesEntrada:

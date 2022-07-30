@@ -44,8 +44,9 @@ class _MapMarkersState extends State<MapMarkers> {
 
   GoogleMapController mapController; //contrller for Google map
   final Set<Marker> markers = new Set(); //markers for google map
-  static const LatLng showLocation = const LatLng(
-      14.6411, -90.5171);///ubicacion inicial porque aqui hay varios parqueos
+  static const LatLng showLocation = const LatLng(14.6411, -90.5171);
+
+  ///ubicacion inicial porque aqui hay varios parqueos
 
   @override
   void initState() {
@@ -93,7 +94,7 @@ class _MapMarkersState extends State<MapMarkers> {
   Widget build(BuildContext context) {
     crear_icono_asset(context);
 
-   return Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
           BlocBuilder<MiUbicacionBloc, MiUbicacionState>(
@@ -113,9 +114,8 @@ class _MapMarkersState extends State<MapMarkers> {
         ],
       ),
     );
-  
 
-   /* return Scaffold(
+    /* return Scaffold(
       body: GoogleMap(
         //Map widget from google_maps_flutter package
         zoomGesturesEnabled: true, //enable Zoom in, out on map
@@ -139,42 +139,49 @@ class _MapMarkersState extends State<MapMarkers> {
     );*/
   }
 
-
- 
-
-  Set<Marker> getmarkers()  {
+  Set<Marker> getmarkers() {
     final parqueosService = Provider.of<ParqueosService>(context);
     final ParqueosProvider parqueosProvider = new ParqueosProvider();
 
-
-
-    
-
     //markers to place on map
-   // setState(() {
-      for (var i = 0; i < parqueosService.parqueos.length; i++) {
-        Parqueos parkingPoint = parqueosService.parqueos[i];
+    // setState(() {
+    for (var i = 0; i < parqueosService.parqueos.length; i++) {
+      Parqueos parkingPoint = parqueosService.parqueos[i];
 
-        print(parkingPoint);
+      print(parkingPoint);
 
-        // marcador_personalizado(context);
-        //crear_icono_asset(context);
+      // marcador_personalizado(context);
+      //crear_icono_asset(context);
 
-        var longlatitud = double.parse(parkingPoint.latitude);
-        var longlongitud = double.parse(parkingPoint.longitude);
-        var arr = parkingPoint.detalles.split(' ');
+      var longlatitud = double.parse(parkingPoint.latitude);
+      var longlongitud = double.parse(parkingPoint.longitude);
+      var arr = parkingPoint.detalles.split(' ');
 
-        List<String> arrfake = ['1','2','3','4','5','6','7','8','9','10','A','B','C','D'];
+      List<String> arrfake = [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        'A',
+        'B',
+        'C',
+        'D'
+      ];
 
-    //  print("el arreglo es $arr");
+      //  print("el arreglo es $arr");
 
+      var det1;
+      var det2;
+      var det3;
+      var det4;
 
-        var det1;
-        var det2;
-        var det3;
-        var det4;
-
-        // String identificador = index;
+      // String identificador = index;
 /*
         if (arr[0] == '1') {
           det1 =
@@ -340,85 +347,86 @@ class _MapMarkersState extends State<MapMarkers> {
               'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
         }*/
 
-        markers.add(Marker(
-          markerId: MarkerId(parkingPoint.idParqueo),
-          position: LatLng(longlatitud, longlongitud),
-          infoWindow: InfoWindow(
-            //popup info
-            title: parkingPoint.nombreParqueo,
-            snippet: parkingPoint.direccion,
-          ),
-          // icon: BitmapDescriptor.defaultMarker, //Icon for Marker
-          icon: customIcon, //Icon for Marker
+      markers.add(Marker(
+        markerId: MarkerId(parkingPoint.idParqueo),
+        position: LatLng(longlatitud, longlongitud),
+        infoWindow: InfoWindow(
+          //popup info
+          title: parkingPoint.nombreParqueo,
+          snippet: parkingPoint.direccion,
+        ),
+        // icon: BitmapDescriptor.defaultMarker, //Icon for Marker
+        icon: customIcon, //Icon for Marker
 
-          onTap: () async {
-            List<Resenia> listar =
-                await reseniasProvider.reviewsbyPark(parkingPoint.idParqueo);
+        onTap: () async {
+          List<Resenia> listar =
+              await reseniasProvider.reviewsbyPark(parkingPoint.idParqueo);
 
-            ResponseApi responseApiespacios =
-                await parqueosProvider.getslots(parkingPoint.idParqueo);
+          ResponseApi responseApiespacios =
+              await parqueosProvider.getslots(parkingPoint.idParqueo);
 
-            Espacios espacios = Espacios.fromJson(responseApiespacios.data);
+          Espacios espacios = Espacios.fromJson(responseApiespacios.data);
 
-            String ocupados = espacios.espaciosOcupados;
-            int espaciodisponibles =
-                int.parse(parkingPoint.capacidad) - int.parse(ocupados);
+          String ocupados = espacios.espaciosOcupados;
+          int espaciodisponibles =
+              int.parse(parkingPoint.capacidad) - int.parse(ocupados);
 
-            String espacioslibres = espaciodisponibles.toString();
+          String espacioslibres = espaciodisponibles.toString();
 
-            print('Infor window tap');
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ParkingPointDetailsScreen(
-                    idpark: parkingPoint.idParqueo,
-                    name: parkingPoint
-                        .nombreParqueo, //        name: parkingPoint.name,
-                    amount: parkingPoint.capacidad,
-                    image: parkingPoint.imagenes,
-                    address: parkingPoint.direccion,
-                    slots: espacioslibres,
-                    mediahora: parkingPoint.mediaHora,
-                    hora: parkingPoint.hora,
-                    dia: parkingPoint.dia,
-                    mes: parkingPoint.mes,
-                    lunesEntrada: parkingPoint.lunesEntrada,
-                    lunesCierre: parkingPoint.lunesCierre,
-                    martesEntrada: parkingPoint.lunesEntrada,
-                    martesSalida: parkingPoint.lunesCierre,
-                    detalles: arr,
-                    detalles1: det1,
-                    detalles2: det2,
-                    detalles3: det3,
-                    detalles4: det4,
-                    latitude: longlatitud,
-                    longitude: longlongitud,
-                    miercolesEntrada: parkingPoint.miercolesEntrada,
-                    miercolesSalida: parkingPoint.miercolesSalida,
-                    juevesEntrada: parkingPoint.juevesEntrada,
-                    juevesSalida: parkingPoint.juevesSalida,
-                    viernesEntrada: parkingPoint.viernesEntrada,
-                    viernesSalida: parkingPoint.viernesSalida,
-                    sabadoEntrada: parkingPoint.sabadoEntrada,
-                    sabadoSalida: parkingPoint.sabadoSalida,
-                    domingoEntrada: parkingPoint.domingoApertura,
-                    domingoSalida: parkingPoint.domingoCierre,
-                    controlPagos: parkingPoint.controlPagos,
-                    idusuario: widget.idusuario,
-                    nombreusuario: widget.nombreusuario,
-                    telefono: widget.telefono,
-                    modelo_auto: widget.modelo_auto,
-                    placa_auto: widget.placa_auto,
-                    imagen_usuario: widget.imagen_usuario,
-                    listaresenias: listar)));
-          },
-        ));
-      }
-      ;
+          print('Infor window tap');
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ParkingPointDetailsScreen(
+                  idpark: parkingPoint.idParqueo,
+                  name: parkingPoint
+                      .nombreParqueo, //        name: parkingPoint.name,
+                  amount: parkingPoint.capacidad,
+                  image: parkingPoint.imagenes,
+                  address: parkingPoint.direccion,
+                  slots: espacioslibres,
+                  mediahora: parkingPoint.mediaHora,
+                  hora: parkingPoint.hora,
+                  dia: parkingPoint.dia,
+                  mes: parkingPoint.mes,
+                  lunesEntrada: parkingPoint.lunesEntrada,
+                  lunesCierre: parkingPoint.lunesCierre,
+                  martesEntrada: parkingPoint.lunesEntrada,
+                  martesSalida: parkingPoint.lunesCierre,
+                  detalles: arr,
+                  cantidad_detalles: arr.length,
+                  detalles1: det1,
+                  detalles2: det2,
+                  detalles3: det3,
+                  detalles4: det4,
+                  latitude: longlatitud,
+                  longitude: longlongitud,
+                  miercolesEntrada: parkingPoint.miercolesEntrada,
+                  miercolesSalida: parkingPoint.miercolesSalida,
+                  juevesEntrada: parkingPoint.juevesEntrada,
+                  juevesSalida: parkingPoint.juevesSalida,
+                  viernesEntrada: parkingPoint.viernesEntrada,
+                  viernesSalida: parkingPoint.viernesSalida,
+                  sabadoEntrada: parkingPoint.sabadoEntrada,
+                  sabadoSalida: parkingPoint.sabadoSalida,
+                  domingoEntrada: parkingPoint.domingoApertura,
+                  domingoSalida: parkingPoint.domingoCierre,
+                  controlPagos: parkingPoint.controlPagos,
+                  idusuario: widget.idusuario,
+                  nombreusuario: widget.nombreusuario,
+                  telefono: widget.telefono,
+                  modelo_auto: widget.modelo_auto,
+                  placa_auto: widget.placa_auto,
+                  imagen_usuario: widget.imagen_usuario,
+                  listaresenias: listar)));
+        },
+      ));
+    }
+    ;
     //});
 
     return markers;
   }
 
-   Widget crearMapa(MiUbicacionState state) {
+  Widget crearMapa(MiUbicacionState state) {
     if (!state.existeUbicacion) return Center(child: Text('Ubicando...'));
 
     final mapaBloc = BlocProvider.of<MapaBloc>(context);
@@ -430,7 +438,7 @@ class _MapMarkersState extends State<MapMarkers> {
     //redibujar si el bloc del mapa cambia
 
     return BlocBuilder<MapaBloc, MapaState>(
-      builder: (context, _)  {
+      builder: (context, _) {
         //(context,state)
         return GoogleMap(
           initialCameraPosition: cameraPosition,
@@ -438,8 +446,8 @@ class _MapMarkersState extends State<MapMarkers> {
           myLocationButtonEnabled: true,
           zoomControlsEnabled: true,
           onMapCreated: mapaBloc.initMapa,
-         // polylines: mapaBloc.state.polylines.values.toSet(),
-        //  markers: mapaBloc.state.markers.values.toSet(),
+          // polylines: mapaBloc.state.polylines.values.toSet(),
+          //  markers: mapaBloc.state.markers.values.toSet(),
           markers: getmarkers(),
           onCameraMove: (cameraPosition) {
             // cameraPosition.target = LatLng central del mapa
