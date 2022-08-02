@@ -7,12 +7,15 @@ import 'package:parkline/models/espacios.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/resenia.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/visita.dart';
 import 'package:parkline/pages/map_markers_search.dart';
 import 'package:parkline/pages/mapa_page.dart';
 import 'package:parkline/pages/mapa_page_copy.dart';
 import 'package:parkline/providers/usuarios_provider.dart';
+import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/dashboard/direction_history_screen.dart';
 import 'package:parkline/screens/dashboard/filter.dart';
+import 'package:parkline/screens/dashboard/parking_history_screen_full.dart';
 import 'package:parkline/screens/dashboard_screen_filter.dart';
 import 'package:parkline/services/parqueos_service.dart';
 import 'package:parkline/utils/dimensions.dart';
@@ -128,6 +131,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         new ServiciosadminProvider();
 
     final parqueosService = Provider.of<ParqueosService>(context);
+    final VisitasProvider visitasProvider = new VisitasProvider();
     //Agregando psuedo estado
 
     return SafeArea(
@@ -145,7 +149,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Historial de Parqueos',
+                    'Historial de Visitas a Parqueos',
+                    style: CustomStyle.listStyle,
+                  ),
+                  trailing: Icon(Icons.history),
+                  onTap: () async {
+                    List<Visita> lista_visitas =
+                        await visitasProvider.getbyuser("8");
+
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ParkingHistoryScreenFull(
+                            listaservicios: lista_visitas)));
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: Dimensions.marginSize,
+                      right: Dimensions.marginSize),
+                  child: Divider(
+                    color: Colors.black.withOpacity(0.4),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Historial de Parqueos OLD',
                     style: CustomStyle.listStyle,
                   ),
                   trailing: Icon(Icons.history),
@@ -937,12 +965,12 @@ class _FilterState extends State<Filter> {
                 height: 30,
               ),
               RangeSlider(
-                  divisions: 40,
+                  divisions: 100,
                   labels: RangeLabels('Q${rangeValues.start.toString()}',
                       'Q${rangeValues.end.toString()}'),
                   activeColor: CustomColor.primaryColor,
                   min: 0,
-                  max: 40,
+                  max: 100,
                   values: rangeValues,
                   onChanged: (value) {
                     setState(() {

@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity,
             fontFamily: 'Ubuntu'),
         home: LoadingPage(),
-        // home: MapaPage(),//
+        // home: MapaPage(),//indy
         routes: {
           'mapa': (_) => MapaPage(),
           'loading': (_) => LoadingPage(),
