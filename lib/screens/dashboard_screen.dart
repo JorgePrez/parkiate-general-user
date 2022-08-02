@@ -7,6 +7,7 @@ import 'package:parkline/models/espacios.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/resenia.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/models/visita.dart';
 import 'package:parkline/pages/map_markers_search.dart';
 import 'package:parkline/pages/mapa_page.dart';
@@ -154,8 +155,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   trailing: Icon(Icons.history),
                   onTap: () async {
+                    UsuarioApp user_app = UsuarioApp.fromJson(
+                        await _sharedPref.read('usuario_app') ?? {});
+
+                    print('Usuario_app: ${user_app.toJson()}');
+
                     List<Visita> lista_visitas =
-                        await visitasProvider.getbyuser("8");
+                        await visitasProvider.getbyuser(user_app.id);
 
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
@@ -262,17 +268,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   trailing: Icon(Icons.add_location_outlined),
                   onTap: () async {
+                    UsuarioApp user_app = UsuarioApp.fromJson(
+                        await _sharedPref.read('usuario_app') ?? {});
+
+                    print('Usuario_app: ${user_app.toJson()}');
+
                     UsuarioProvider usuarioProvider = new UsuarioProvider();
 
                     List<Direccion> lista =
-                        await usuarioProvider.getDirections(widget.id);
+                        await usuarioProvider.getDirections(user_app.id);
 
                     print(lista);
 
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => DirectionHistoryScreen(
-                            listaservicios: lista, id_usuario: widget.id)));
+                            listaservicios: lista, id_usuario: user_app.id)));
                   },
                 ),
                 Padding(

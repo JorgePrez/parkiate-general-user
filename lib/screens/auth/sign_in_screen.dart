@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:parkline/models/usuarios_app.dart';
+import 'package:parkline/providers/usuarios_app_provider.dart';
 import 'package:parkline/utils/colors.dart';
 import 'package:parkline/utils/custom_style.dart';
 import 'package:parkline/utils/dimensions.dart';
@@ -20,6 +22,7 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   UsuarioProvider usuarioProvider = new UsuarioProvider();
+  UsuarioAppProvider usuarioAppProvider = new UsuarioAppProvider();
   SharedPref _sharedPref = new SharedPref();
 
   bool _toggleVisibility = true;
@@ -181,10 +184,16 @@ class _SignInScreenState extends State<SignInScreen> {
               String password = passwordController.text.trim();
 
               ResponseApi responseApi =
-                  await usuarioProvider.login(email, password);
+                  await usuarioProvider.login('jensen@gmail.com', '579!!Oo296');
 
               print('Respuesta object: ${responseApi}');
               print('RESPUESTA: ${responseApi.toJson()}');
+
+              ResponseApi responseApitrue =
+                  await usuarioAppProvider.login(email, password);
+
+              UsuarioApp user_app = UsuarioApp.fromJson(responseApitrue.data);
+              _sharedPref.save('usuario_app', user_app.toJson());
 
               if (responseApi.success) {
                 User user = User.fromJson(responseApi.data);
