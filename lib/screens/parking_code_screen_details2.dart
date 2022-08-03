@@ -1,40 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:parkline/screens/parking_direction_screen_guide.dart';
+import 'package:parkline/screens/parking_direction_screen_guide2.dart';
 import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/custom_style.dart';
 import 'package:parkline/utils/colors.dart';
 
-class ParkingCodeScreenDetails extends StatefulWidget {
+class ParkingCodeScreenDetails2 extends StatefulWidget {
   final String img_auto,
       numero_placa,
-      tiempo_total,
       timestamp_entrada,
-      timestamp_salida,
       email,
       telefono,
       id_visita,
       nombre_parqueo,
-      direccion;
+      direccion,
+      latitude,
+      longitude;
 
-  ParkingCodeScreenDetails({
+  ParkingCodeScreenDetails2({
     Key key,
     this.img_auto,
     this.numero_placa,
-    this.tiempo_total,
     this.timestamp_entrada,
-    this.timestamp_salida,
     this.email,
     this.telefono,
     this.id_visita,
     this.nombre_parqueo,
     this.direccion,
+    this.latitude,
+    this.longitude,
   }) : super(key: key);
 
   @override
-  _ParkingCodeScreenDetailsState createState() =>
-      _ParkingCodeScreenDetailsState();
+  _ParkingCodeScreenDetails2State createState() =>
+      _ParkingCodeScreenDetails2State();
 }
 
-class _ParkingCodeScreenDetailsState extends State<ParkingCodeScreenDetails> {
+class _ParkingCodeScreenDetails2State extends State<ParkingCodeScreenDetails2> {
   @override
   Widget build(BuildContext context) {
     // final servicioService = Provider.of<ServiciosService>(context);
@@ -115,6 +117,43 @@ class _ParkingCodeScreenDetailsState extends State<ParkingCodeScreenDetails> {
             height: Dimensions.heightSize * 1.5, //2
           ),
           invoiceDetailsWidget(context),
+          SizedBox(
+            height: Dimensions.heightSize * 1.5, //2
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: Dimensions.marginSize, right: Dimensions.marginSize),
+            child: GestureDetector(
+              child: Container(
+                height: 50.0,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(Dimensions.radius * 0.5))),
+                child: Center(
+                  child: Text(
+                    'Ver ubicación del parqueo',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: Dimensions.largeTextSize,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              onTap: () {
+                /*guardar ubicacion 
+                    
+                    */
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ParkingDirectionScreenGuide2(
+                          latitude: double.parse(widget.latitude),
+                          longitude: double.parse(widget.longitude),
+                        )));
+                //}
+              },
+            ),
+          )
           /* SizedBox(height: Dimensions.heightSize * 2.5), //3
         Padding(
           padding: const EdgeInsets.only(
@@ -176,11 +215,43 @@ class _ParkingCodeScreenDetailsState extends State<ParkingCodeScreenDetails> {
             height: Dimensions.heightSize * 1.5, //2
           ),
           invoiceDetailsWidget(context),
-          /* SizedBox(height: Dimensions.heightSize * 2.5), //3
-        Padding(
-          padding: const EdgeInsets.only(
-              left: Dimensions.marginSize, right: Dimensions.marginSize),
-        ),*/
+          SizedBox(
+            height: Dimensions.heightSize * 1.5, //2
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: Dimensions.marginSize, right: Dimensions.marginSize),
+            child: GestureDetector(
+              child: Container(
+                height: 50.0,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(Dimensions.radius * 0.5))),
+                child: Center(
+                  child: Text(
+                    'Ver ubicación del parqueo',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: Dimensions.largeTextSize,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              onTap: () {
+                /*guardar ubicacion 
+                    
+                    */
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ParkingDirectionScreenGuide2(
+                          latitude: double.parse(widget.latitude),
+                          longitude: double.parse(widget.longitude),
+                        )));
+                //}
+              },
+            ),
+          )
         ],
       );
     }
@@ -223,34 +294,6 @@ class _ParkingCodeScreenDetailsState extends State<ParkingCodeScreenDetails> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'Tiempo total:',
-                      style: CustomStyle.textStylebold,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      widget.tiempo_total,
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: Dimensions.heightSize * 2),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
                       'ENTRADA:',
                       style: CustomStyle.textStylebold,
                     ),
@@ -259,28 +302,6 @@ class _ParkingCodeScreenDetailsState extends State<ParkingCodeScreenDetails> {
                     ),
                     Text(
                       widget.timestamp_entrada,
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'SALIDA:',
-                      style: CustomStyle.textStylebold,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      widget.timestamp_salida,
                       style: TextStyle(
                           fontSize: Dimensions.defaultTextSize,
                           color: CustomColor.primaryColor,

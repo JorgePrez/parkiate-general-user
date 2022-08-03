@@ -38,7 +38,7 @@ class _BuildMarcadorManualRuta extends StatelessWidget {
     //return this.calcularDestino(context);
 
     final width = MediaQuery.of(context).size.width;
-    
+
     final height = MediaQuery.of(context).size.height;
     return Stack(
       alignment: Alignment.topCenter,
@@ -52,9 +52,10 @@ class _BuildMarcadorManualRuta extends StatelessWidget {
             child: FadeIn(
               child: MaterialButton(
                   //minWidth: width - 200, //120
-                   minWidth: width -75, //120
+                  minWidth: width - 75, //120
 
-                  child: Text('Actualizar Ruta', style: TextStyle(color: Colors.white)),
+                  child: Text(' Ver o Actualizar Ruta',
+                      style: TextStyle(color: Colors.white)),
                   color: Colors.red,
                   shape: StadiumBorder(),
                   elevation: 0, //0
@@ -70,11 +71,12 @@ class _BuildMarcadorManualRuta extends StatelessWidget {
             child: FadeIn(
               child: MaterialButton(
                   //minWidth: width - 200, //120
-                   minWidth: width -120, //120
+                  minWidth: width - 120, //120
 
-                  child: Text('Actualizar Ruta', style: TextStyle(color: Colors.white)),
+                  child: Text('Ver o Actualizar Ruta',
+                      style: TextStyle(color: Colors.white)),
                   color: Colors.red,
-                //  shape: StadiumBorder(),
+                  //  shape: StadiumBorder(),
                   elevation: 0, //0
                   splashColor: Colors.blue,
                   onPressed: () {

@@ -38,14 +38,14 @@ class _BuildMarcadorManualRuta2 extends StatelessWidget {
     //return this.calcularDestino(context);
 
     final width = MediaQuery.of(context).size.width;
-    
+
     final height = MediaQuery.of(context).size.height;
     return Stack(
       alignment: Alignment.topCenter,
       children: [
         //Boton regresar
 
-         Positioned(
+        Positioned(
             top: 50,
             left: 20,
             child: FadeInLeft(
@@ -56,10 +56,7 @@ class _BuildMarcadorManualRuta2 extends StatelessWidget {
                 child: IconButton(
                     icon: Icon(Icons.arrow_back, color: Colors.black87),
                     onPressed: () {
-
-
-                    Navigator.of(context).pop();
-
+                      Navigator.of(context).pop();
 
                       /*context
                           .bloc<BusquedaBloc>()
@@ -68,7 +65,6 @@ class _BuildMarcadorManualRuta2 extends StatelessWidget {
               ),
             )),
 
-
         //Boton de para mapa grande
         Positioned(
             bottom: 20, //70
@@ -76,9 +72,10 @@ class _BuildMarcadorManualRuta2 extends StatelessWidget {
             child: FadeIn(
               child: MaterialButton(
                   //minWidth: width - 200, //120
-                   minWidth: width -75, //120
+                  minWidth: width - 75, //120
 
-                  child: Text('Actualizar Ruta', style: TextStyle(color: Colors.white)),
+                  child: Text('Ver o Actualizar Ruta',
+                      style: TextStyle(color: Colors.white)),
                   color: Colors.red,
                   shape: StadiumBorder(),
                   elevation: 0, //0
@@ -88,7 +85,7 @@ class _BuildMarcadorManualRuta2 extends StatelessWidget {
                   }),
             )),
 
-       /* Positioned(
+        /* Positioned(
             bottom: 0, //70
             left: 0, //40
             child: FadeIn(

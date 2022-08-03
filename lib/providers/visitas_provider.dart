@@ -4,6 +4,7 @@ import 'package:parkline/api/environment.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/visita.dart';
 import 'package:http/http.dart' as http;
+import 'package:parkline/models/visita_actual.dart';
 
 class VisitasProvider {
   String _url = Enviroment.API_PARKIATE_KI;
@@ -61,6 +62,26 @@ class VisitasProvider {
     } catch (e) {
       print('Error: $e');
       return [];
+    }
+  }
+
+  Future<Visitactual> getById(String id_usuario, String id_visita) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/getactual');
+
+      String bodyParams =
+          json.encode({'id_usuario': id_usuario, 'id_visita': id_visita});
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+
+      Visitactual visitactual = Visitactual.fromJson(data);
+      return visitactual;
+    } catch (e) {
+      print('Error: $e');
+      return null;
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:parkline/models/espacios.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/resenia.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/pages/map_markers_search.dart';
 import 'package:parkline/pages/mapa_page.dart';
 import 'package:parkline/pages/mapa_page_copy.dart';
@@ -661,6 +662,11 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                         List<Resenia> listar = await reseniasProvider
                             .reviewsbyPark2(parkingPoint.idParqueo);
 
+                        UsuarioApp user_app = UsuarioApp.fromJson(
+                            await _sharedPref.read('usuario_app') ?? {});
+
+                        print('Usuario_app: ${user_app.toJson()}');
+
                         //Obtener cantidad de espacios disponbiles
 
                         // print(listar);
@@ -698,12 +704,12 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                                 domingoEntrada: parkingPoint.domingoApertura,
                                 domingoSalida: parkingPoint.domingoCierre,
                                 controlPagos: parkingPoint.controlPagos,
-                                idusuario: widget.id,
-                                nombreusuario: widget.nombre,
-                                telefono: widget.telefono,
-                                modelo_auto: widget.modelo_auto,
-                                placa_auto: widget.placa_auto,
-                                imagen_usuario: widget.imagen,
+                                idusuario: user_app.id,
+                                nombreusuario: user_app.nombre,
+                                telefono: user_app.telefono,
+                                modelo_auto: 'NA',
+                                placa_auto: 'Por definir',
+                                imagen_usuario: user_app.fotoPerfil,
                                 listaresenias: listar)));
                       },
                     ),

@@ -3,8 +3,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkline/bloc/mapa/mapa_bloc.dart';
 import 'package:parkline/models/models.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/services/services.dart';
 import 'package:parkline/screens/parking_point_details_screen.dart';
+import 'package:parkline/utils/shared_pref.dart';
 import 'package:provider/provider.dart';
 import 'package:parkline/helpers/helpers.dart';
 import 'package:parkline/bloc/mi_ubicacion/mi_ubicacion_bloc.dart';
@@ -41,6 +43,7 @@ class _MapMarkersState extends State<MapMarkers> {
   BitmapDescriptor customIcon;
 
   final ReseniasProvider reseniasProvider = new ReseniasProvider();
+  SharedPref _sharedPref = new SharedPref();
 
   GoogleMapController mapController; //contrller for Google map
   final Set<Marker> markers = new Set(); //markers for google map
@@ -182,170 +185,6 @@ class _MapMarkersState extends State<MapMarkers> {
       var det4;
 
       // String identificador = index;
-/*
-        if (arr[0] == '1') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-        } else if (arr[0] == '2') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-        } else if (arr[0] == '3') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-        } else if (arr[0] == '4') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-        } else if (arr[0] == '5') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-        } else if (arr[0] == '6') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-        } else if (arr[0] == '7') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-        } else if (arr[0] == '8') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-        } else if (arr[0] == '9') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-        } else if (arr[0] == 'A') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-        } else if (arr[0] == 'B') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-        } else if (arr[0] == 'C') {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-        } else {
-          det1 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-        }
-
-        if (arr[1] == '1') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-        } else if (arr[1] == '2') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-        } else if (arr[1] == '3') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-        } else if (arr[1] == '4') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-        } else if (arr[1] == '5') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-        } else if (arr[1] == '6') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-        } else if (arr[1] == '7') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-        } else if (arr[1] == '8') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-        } else if (arr[1] == '9') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-        } else if (arr[1] == 'A') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-        } else if (arr[1] == 'B') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-        } else if (arr[1] == 'C') {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-        } else {
-          det2 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-        }
-
-        if (arr[2] == '1') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-        } else if (arr[2] == '2') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-        } else if (arr[2] == '3') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-        } else if (arr[2] == '4') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-        } else if (arr[2] == '5') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-        } else if (arr[2] == '6') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-        } else if (arr[2] == '7') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-        } else if (arr[2] == '8') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-        } else if (arr[2] == '9') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-        } else if (arr[2] == 'A') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-        } else if (arr[2] == 'B') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-        } else if (arr[2] == 'C') {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-        } else {
-          det3 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-        }
-
-        if (arr[3] == '1') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/1_riqfzd.png';
-        } else if (arr[3] == '2') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/2_v2zem3.png';
-        } else if (arr[3] == '3') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/3_dfxgfo.png';
-        } else if (arr[3] == '4') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373789/detalles/4_odwmz9.png';
-        } else if (arr[3] == '5') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/5_gkazjl.png';
-        } else if (arr[3] == '6') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/6_olkgog.png';
-        } else if (arr[3] == '7') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/7_mvggpw.png';
-        } else if (arr[3] == '8') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/8_ondlpp.png';
-        } else if (arr[3] == '9') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/9_lhsh3d.png';
-        } else if (arr[3] == 'A') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/A_xzyu9l.png';
-        } else if (arr[3] == 'B') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/B_e7xfxj.png';
-        } else if (arr[3] == 'C') {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1634373790/detalles/C_rz6hde.png';
-        } else {
-          det4 =
-              'https://res.cloudinary.com/parkiate-ki/image/upload/v1638389304/detalles/pngwing.com_1_f0125w.png';
-        }*/
 
       markers.add(Marker(
         markerId: MarkerId(parkingPoint.idParqueo),
@@ -359,6 +198,11 @@ class _MapMarkersState extends State<MapMarkers> {
         icon: customIcon, //Icon for Marker
 
         onTap: () async {
+          UsuarioApp user_app =
+              UsuarioApp.fromJson(await _sharedPref.read('usuario_app') ?? {});
+
+          print('Usuario_app: ${user_app.toJson()}');
+
           List<Resenia> listar =
               await reseniasProvider.reviewsbyPark2(parkingPoint.idParqueo);
 
@@ -399,12 +243,12 @@ class _MapMarkersState extends State<MapMarkers> {
                   domingoEntrada: parkingPoint.domingoApertura,
                   domingoSalida: parkingPoint.domingoCierre,
                   controlPagos: parkingPoint.controlPagos,
-                  idusuario: widget.idusuario,
-                  nombreusuario: widget.nombreusuario,
-                  telefono: widget.telefono,
-                  modelo_auto: widget.modelo_auto,
-                  placa_auto: widget.placa_auto,
-                  imagen_usuario: widget.imagen_usuario,
+                  idusuario: user_app.id,
+                  nombreusuario: user_app.nombre,
+                  telefono: user_app.telefono,
+                  modelo_auto: 'NA',
+                  placa_auto: 'Por definir',
+                  imagen_usuario: user_app.fotoPerfil,
                   listaresenias: listar)));
         },
       ));

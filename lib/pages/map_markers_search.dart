@@ -3,8 +3,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkline/bloc/mapa/mapa_bloc.dart';
 import 'package:parkline/models/models.dart';
 import 'package:parkline/models/parqueo.dart';
+import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/services/services.dart';
 import 'package:parkline/screens/parking_point_details_screen.dart';
+import 'package:parkline/utils/shared_pref.dart';
 import 'package:parkline/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:parkline/helpers/helpers.dart';
@@ -45,6 +47,7 @@ class _MapMarkersSearchState extends State<MapMarkersSearch> {
   BitmapDescriptor customIcon;
 
   final ReseniasProvider reseniasProvider = new ReseniasProvider();
+  SharedPref _sharedPref = new SharedPref();
 
   GoogleMapController mapController; //contrller for Google map
   final Set<Marker> markers = new Set(); //markers for google map
@@ -180,6 +183,11 @@ class _MapMarkersSearchState extends State<MapMarkersSearch> {
         icon: customIcon, //Icon for Marker
 
         onTap: () async {
+          UsuarioApp user_app =
+              UsuarioApp.fromJson(await _sharedPref.read('usuario_app') ?? {});
+
+          print('Usuario_app: ${user_app.toJson()}');
+
           List<Resenia> listar =
               await reseniasProvider.reviewsbyPark2(parkingPoint.idParqueo);
 
@@ -220,12 +228,12 @@ class _MapMarkersSearchState extends State<MapMarkersSearch> {
                   domingoEntrada: parkingPoint.domingoApertura,
                   domingoSalida: parkingPoint.domingoCierre,
                   controlPagos: parkingPoint.controlPagos,
-                  idusuario: widget.idusuario,
-                  nombreusuario: widget.nombreusuario,
-                  telefono: widget.telefono,
-                  modelo_auto: widget.modelo_auto,
-                  placa_auto: widget.placa_auto,
-                  imagen_usuario: widget.imagen_usuario,
+                  idusuario: user_app.id,
+                  nombreusuario: user_app.nombre,
+                  telefono: user_app.telefono,
+                  modelo_auto: 'NA',
+                  placa_auto: 'Por definir',
+                  imagen_usuario: user_app.fotoPerfil,
                   listaresenias: listar)));
         },
       ));

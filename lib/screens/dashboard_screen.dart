@@ -9,6 +9,7 @@ import 'package:parkline/models/resenia.dart';
 import 'package:parkline/models/parqueo.dart';
 import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/models/visita.dart';
+import 'package:parkline/models/visita_actual.dart';
 import 'package:parkline/pages/map_markers_search.dart';
 import 'package:parkline/pages/mapa_page.dart';
 import 'package:parkline/pages/mapa_page_copy.dart';
@@ -18,6 +19,7 @@ import 'package:parkline/screens/dashboard/direction_history_screen.dart';
 import 'package:parkline/screens/dashboard/filter.dart';
 import 'package:parkline/screens/dashboard/parking_history_screen_full.dart';
 import 'package:parkline/screens/dashboard_screen_filter.dart';
+import 'package:parkline/screens/parking_code_screen_details2.dart';
 import 'package:parkline/services/parqueos_service.dart';
 import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/custom_style.dart';
@@ -146,6 +148,69 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: profileWidget(context),
                   decoration: BoxDecoration(
                     color: CustomColor.primaryColor,
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Parqueo Actual [Unicamente con código QR escaneado] ',
+                    style: CustomStyle.listStyle,
+                  ),
+                  trailing: Icon(Icons.local_parking_outlined),
+                  onTap: () async {
+                    String visita_app = '4GBG32';
+                    //TODO: VALOR VIENE DEL TOKEN local
+
+                    UsuarioApp user_app = UsuarioApp.fromJson(
+                        await _sharedPref.read('usuario_app') ?? {});
+
+                    Visitactual visita_actual =
+                        await visitasProvider.getById(user_app.id, visita_app);
+
+                    print('Usuario_app: ${visita_actual.toJson()}');
+
+                    if (visita_app.length > 2) {
+                      String temporal_fecha_E =
+                          visita_actual.timestampEntrada.substring(1, 11);
+                      String temporal_hora_E =
+                          visita_actual.timestampEntrada.substring(11);
+
+                      String hora_E = temporal_hora_E.substring(0, 5);
+
+                      List<String> temporal_fechaE_slipt =
+                          temporal_fecha_E.split('-');
+
+                      String dia_e = temporal_fechaE_slipt[2].trim();
+                      String mes_e = temporal_fechaE_slipt[1];
+                      String anio_e = temporal_fechaE_slipt[0];
+
+                      String fecha_E = '${dia_e}/${mes_e}/${anio_e}';
+                      String entrada = '${hora_E} - $fecha_E';
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ParkingCodeScreenDetails2(
+                                  img_auto: visita_actual.imgAuto,
+                                  numero_placa: visita_actual.numeroPlaca,
+                                  timestamp_entrada: entrada,
+                                  email: visita_actual.email,
+                                  telefono: visita_actual.telefono,
+                                  id_visita: visita_actual.idVisitactual,
+                                  nombre_parqueo: visita_actual.nombreParqueo,
+                                  direccion: visita_actual.direccion,
+                                  latitude: visita_actual.latitude,
+                                  longitude: visita_actual.longitude)));
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: Dimensions.marginSize,
+                      right: Dimensions.marginSize),
+                  child: Divider(
+                    color: Colors.black.withOpacity(0.4),
                   ),
                 ),
                 ListTile(
@@ -832,6 +897,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         List<Resenia> listar = await reseniasProvider
                             .reviewsbyPark2(parkingPoint.idParqueo);
 
+                        UsuarioApp user_app = UsuarioApp.fromJson(
+                            await _sharedPref.read('usuario_app') ?? {});
+
+                        print('Usuario_app: ${user_app.toJson()}');
                         //Obtener cantidad de espacios disponbiles
 
                         // print(listar);
@@ -869,12 +938,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 domingoEntrada: parkingPoint.domingoApertura,
                                 domingoSalida: parkingPoint.domingoCierre,
                                 controlPagos: parkingPoint.controlPagos,
-                                idusuario: widget.id,
-                                nombreusuario: widget.nombre,
-                                telefono: widget.telefono,
-                                modelo_auto: widget.modelo_auto,
-                                placa_auto: widget.placa_auto,
-                                imagen_usuario: widget.imagen,
+                                idusuario: user_app.id,
+                                nombreusuario: user_app.nombre,
+                                telefono: user_app.telefono,
+                                modelo_auto: 'NA',
+                                placa_auto: 'Por definir',
+                                imagen_usuario: user_app.fotoPerfil,
                                 listaresenias: listar)));
                       },
                     ),
