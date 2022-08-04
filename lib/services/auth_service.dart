@@ -70,25 +70,25 @@ class AuthService extends ChangeNotifier {
 
   Future<String> crearubicacio(String latitude, String longitude) async {
     await storage.write(key: 'latitude', value: latitude);
-        await storage.write(key: 'longitude', value: longitude);
+    await storage.write(key: 'longitude', value: longitude);
 
     return null;
   }
 
   Future<String> borrarubicacion() async {
-        await storage.delete(key: 'latitude');
-                await storage.delete(key: 'longitude');
-
-
+    await storage.delete(key: 'latitude');
+    await storage.delete(key: 'longitude');
 
     return null;
   }
 
-
- 
-
   Future logout() async {
     await storage.delete(key: 'token');
+    return;
+  }
+
+  Future logout3() async {
+    await storage.delete(key: 'usuario_app');
     return;
   }
 
@@ -96,16 +96,16 @@ class AuthService extends ChangeNotifier {
     await storage.delete(key: 'service');
     return;
   }
-    Future clear_latitude() async {
+
+  Future clear_latitude() async {
     await storage.delete(key: 'latitude');
     return;
   }
 
-    Future clear_longitude() async {
+  Future clear_longitude() async {
     await storage.delete(key: 'longitude');
     return;
   }
-
 
   Future<String> readToken() async {
     return await storage.read(key: 'token') ?? '';
@@ -115,15 +115,11 @@ class AuthService extends ChangeNotifier {
     return await storage.read(key: 'service') ?? '';
   }
 
-    Future<String> readlatitude() async {
+  Future<String> readlatitude() async {
     return await storage.read(key: 'latitude') ?? '';
   }
 
   Future<String> readlongitude() async {
     return await storage.read(key: 'longitude') ?? '';
   }
-
-
-
-  
 }

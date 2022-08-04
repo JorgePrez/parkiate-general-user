@@ -96,7 +96,7 @@ class _ParkingCodeScreenDetails2State extends State<ParkingCodeScreenDetails2> {
                           .marginSize,
                       right: Dimensions.marginSize),
                   child: Text(
-                    'Datos registrados de la visita',
+                    'Datos registrados de la visita actual',
                     style: TextStyle(
                         fontSize: Dimensions.extraLargeTextSize,
                         fontWeight: FontWeight.bold,
@@ -194,7 +194,7 @@ class _ParkingCodeScreenDetails2State extends State<ParkingCodeScreenDetails2> {
                           .marginSize,
                       right: Dimensions.marginSize),
                   child: Text(
-                    'Datos registrados de la visita',
+                    'Datos registrados de la visita actual',
                     style: TextStyle(
                         fontSize: Dimensions.extraLargeTextSize,
                         fontWeight: FontWeight.bold,

@@ -211,6 +211,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           placa_auto: user.placaAuto,
                           imagen_auto: user.imagenAuto,
                           tipo_auto: user.tipoAuto,
+                          nombre_usuario: user_app.nombre,
+                          email_usuario: user_app.email,
+                          foto_perfil: user_app.fotoPerfil,
                         )));
               } else {
                 NotificationsService.showSnackbar(responseApi.message);

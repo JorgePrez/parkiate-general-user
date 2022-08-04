@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/colors.dart';
 import 'data.dart';
@@ -122,7 +123,13 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                                   User user = User.fromJson(
                                       await _sharedPref.read('user') ?? {});
 
+                                  UsuarioApp user_app = UsuarioApp.fromJson(
+                                      await _sharedPref.read('usuario_app') ??
+                                          {});
+
                                   print('Usuario: ${user.toJson()}');
+
+                                  print('Usuario: ${user_app.toJson()}');
 
                                   if (user?.sessionToken != null) {
                                     Navigator.of(context).pushReplacement(
@@ -140,6 +147,11 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                                                   placa_auto: user.placaAuto,
                                                   imagen_auto: user.imagenAuto,
                                                   tipo_auto: user.tipoAuto,
+                                                  nombre_usuario:
+                                                      user_app.nombre,
+                                                  email_usuario: user_app.email,
+                                                  foto_perfil:
+                                                      user_app.fotoPerfil,
                                                 )));
                                   } else {
                                     Navigator.of(context).push(

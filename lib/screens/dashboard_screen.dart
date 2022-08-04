@@ -13,6 +13,7 @@ import 'package:parkline/models/visita_actual.dart';
 import 'package:parkline/pages/map_markers_search.dart';
 import 'package:parkline/pages/mapa_page.dart';
 import 'package:parkline/pages/mapa_page_copy.dart';
+import 'package:parkline/providers/usuarios_app_provider.dart';
 import 'package:parkline/providers/usuarios_provider.dart';
 import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/dashboard/direction_history_screen.dart';
@@ -76,6 +77,8 @@ class DashboardScreen extends StatefulWidget {
       imagen_auto,
       tipo_auto;
 
+  final String nombre_usuario, email_usuario, foto_perfil;
+
   DashboardScreen({
     Key key,
     this.id,
@@ -88,6 +91,9 @@ class DashboardScreen extends StatefulWidget {
     this.placa_auto,
     this.imagen_auto,
     this.tipo_auto,
+    this.nombre_usuario,
+    this.email_usuario,
+    this.foto_perfil,
   }) : super(key: key);
 
   @override
@@ -135,6 +141,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     final parqueosService = Provider.of<ParqueosService>(context);
     final VisitasProvider visitasProvider = new VisitasProvider();
+    final UsuarioAppProvider usuarioAppProvider = new UsuarioAppProvider();
+
     //Agregando psuedo estado
 
     return SafeArea(
@@ -157,18 +165,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   trailing: Icon(Icons.local_parking_outlined),
                   onTap: () async {
-                    String visita_app = '4GBG32';
-                    //TODO: VALOR VIENE DEL TOKEN local
-
                     UsuarioApp user_app = UsuarioApp.fromJson(
                         await _sharedPref.read('usuario_app') ?? {});
 
-                    Visitactual visita_actual =
-                        await visitasProvider.getById(user_app.id, visita_app);
+                    ResponseApi user_app_true = await usuarioAppProvider
+                        .getById(int.parse(user_app.id)); //○8
 
-                    print('Usuario_app: ${visita_actual.toJson()}');
+                    UsuarioApp user2 = UsuarioApp.fromJson(user_app_true.data);
 
-                    if (visita_app.length > 2) {
+                    print(user2.toJson());
+
+                    String visita_app = user2.idVisitaActual;
+
+                    if (!(visita_app == 'N')) {
+                      Visitactual visita_actual = await visitasProvider.getById(
+                          user_app.id, visita_app);
+
+                      print('Usuario_app: ${visita_actual.toJson()}');
+
                       String temporal_fecha_E =
                           visita_actual.timestampEntrada.substring(1, 11);
                       String temporal_hora_E =
@@ -392,7 +406,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: CustomStyle.listStyle,
                   ),
                   trailing: Icon(Icons.logout),
-                  onTap: () {
+                  onTap: () async {
                     //   Navigator.pushReplacementNamed(context, 'signin');
 
                     _sharedPref.logout();
@@ -498,17 +512,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       child: ListTile(
         leading: Image.network(
-          widget.imagen,
+          widget.foto_perfil,
         ),
         title: Text(
-          '${widget?.nombre ?? ''}',
+          '${widget?.nombre_usuario ?? ''}',
           style: TextStyle(
               color: Colors.white,
               fontSize: Dimensions.largeTextSize,
               fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          '${widget?.email ?? ''}',
+          '${widget?.email_usuario ?? ''}',
           style: TextStyle(
             color: Colors.white,
             fontSize: Dimensions.defaultTextSize,

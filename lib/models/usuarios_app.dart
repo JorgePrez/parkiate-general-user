@@ -55,7 +55,7 @@ class UsuarioApp {
         "email": email,
         "nombre": nombre,
         "telefono": telefono,
-        "fotoPerfil": fotoPerfil,
+        "foto_perfil": fotoPerfil,
         "timestamp_creacion": timestampCreacion,
         "id_visita_actual": idVisitaActual,
       };

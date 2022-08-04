@@ -4,9 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:qr_flutter/qr_flutter.dart';
 
-
-
-
+import 'package:parkline/api/environment.dart';
 
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/servicioadmin.dart';
@@ -19,7 +17,6 @@ import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/custom_style.dart';
 import 'package:parkline/utils/colors.dart';
 import 'package:intl/intl.dart';
-
 
 class ParkingCodeScreenEntry extends StatefulWidget {
   final String direccion,
@@ -37,8 +34,7 @@ class ParkingCodeScreenEntry extends StatefulWidget {
       placa_auto;
 
   final String imagen_usuario;
-    final double latitude, longitude;
-
+  final double latitude, longitude;
 
   ParkingCodeScreenEntry(
       {Key key,
@@ -55,7 +51,9 @@ class ParkingCodeScreenEntry extends StatefulWidget {
       this.telefono,
       this.modelo_auto,
       this.placa_auto,
-      this.imagen_usuario, this.latitude, this.longitude})
+      this.imagen_usuario,
+      this.latitude,
+      this.longitude})
       : super(key: key);
 
   @override
@@ -80,7 +78,6 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
   }
 
   bodyWidget(BuildContext context) {
-
     final ServiciosadminProvider serviciosadminProvider =
         new ServiciosadminProvider();
 
@@ -88,7 +85,16 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formatted = formatter.format(now);
 
-   // dynamic currentTime = DateFormat.Hm().format(DateTime.now());
+    String _url = Enviroment.API_PARKIATE_KI2;
+
+    /*
+    Ejemplo de url:
+    https://parkiateki.ngrok.io/Parkiate-web/formularios/registrar_desde_app.php?id_parqueo=86BE48&id_usuario=8
+    */
+    String direccion_registro =
+        'https://${_url}/Parkiate-web/registrar_desde_app.php?id_parqueo=${widget.idparqueo}&id_usuario=${widget.idusuario}';
+
+    // dynamic currentTime = DateFormat.Hm().format(DateTime.now());
 
     //final currentTime = DateFormat.Hm().format(DateTime.now()); //dinamic
     return Column(
@@ -108,23 +114,21 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
-             Padding(
-                  padding: EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize,
-                      top: Dimensions.marginSize),
-                  child: GestureDetector(
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: CustomColor.primaryColor,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
+              Padding(
+                padding: EdgeInsets.only(
+                    left: Dimensions.marginSize,
+                    right: Dimensions.marginSize,
+                    top: Dimensions.marginSize),
+                child: GestureDetector(
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: CustomColor.primaryColor,
                   ),
-                ),  
-
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(
                     top: Dimensions.heightSize * 2.5,
@@ -141,29 +145,18 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
               ),
               SizedBox(height: Dimensions.heightSize),
               GestureDetector(
-                onTap: () async{
-
-               
-                },
+                onTap: () async {},
                 child: Center(
-
-                  
-
-                 /* child: Image.asset(
+                  /* child: Image.asset(
                     'assets/qrcodes.png', //'assets/images/qrcode.png',
                     height: 400.0,
                   ), */
 
                   child: QrImage(
-
-             
-                  data: 'new:${widget.idservicio}',
-                  gapless: false,
-                  size: 250,
-                ),
-
-
-
+                    data: '${direccion_registro}',
+                    gapless: false,
+                    size: 250,
+                  ),
                 ),
               ),
               Padding(
@@ -172,7 +165,7 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                     left: Dimensions //3
                         .marginSize,
                     right: Dimensions.marginSize),
-             /*   child: Text(
+                /*   child: Text(
                   'Datos del servicio actual:',
                   style: TextStyle(
                       fontSize: Dimensions.extraLargeTextSize,
@@ -188,8 +181,7 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
           height: Dimensions.heightSize * 1.5, //2
         ),
 
-        
-          Padding(
+        Padding(
           padding: const EdgeInsets.only(
               left: Dimensions.marginSize, right: Dimensions.marginSize),
           child: GestureDetector(
@@ -211,117 +203,95 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
               ),
             ),
             onTap: () async {
-
-
               //BUSCAR EL ID, si este existe va a permitir navegar sino va a mostrar el banner
 
+              final ServiciosadminProvider serviciosProvider =
+                  new ServiciosadminProvider();
 
-                    final ServiciosadminProvider serviciosProvider = new ServiciosadminProvider();
+              ResponseApi responseApiservicios =
+                  await serviciosProvider.getservicebool(widget.idservicio);
 
+              Bservicios fresenias =
+                  Bservicios.fromJson(responseApiservicios.data);
 
-               ResponseApi responseApiservicios =
-                await serviciosProvider.getservicebool(widget.idservicio);
+              String ocupados = fresenias.servicioBool;
+              int servicioBool = int.parse(ocupados);
 
-            Bservicios fresenias = Bservicios.fromJson(responseApiservicios.data);
+              if (servicioBool > 0) {
+                final currentTime = DateFormat.Hm().format(DateTime.now());
 
-            String ocupados = fresenias.servicioBool;
-            int servicioBool =int.parse(ocupados);
-
-
-
-
-
-            if(servicioBool>0) {
-
-           
-
-            
-  final currentTime = DateFormat.Hm().format(DateTime.now());
-
-            
-
-              ResponseApi responseApi =
-                  await serviciosadminProvider.updateqr(
-                    widget.idservicio, 
-                    widget.idparqueo, 
-                    widget.direccion, 
-                    widget.nombreparqueo, 
-                    widget.imagenes, 
-                    widget.idusuario, 
-                    widget.nombreusuario, 
-                    widget.telefono, 
-                    widget.modelo_auto, 
-                    widget.placa_auto, 
-                    formatted, 
-                    currentTime, 
-                    'Por Definir', 
-                    'Por Definir', 
+                ResponseApi responseApi = await serviciosadminProvider.updateqr(
+                    widget.idservicio,
+                    widget.idparqueo,
+                    widget.direccion,
+                    widget.nombreparqueo,
+                    widget.imagenes,
+                    widget.idusuario,
+                    widget.nombreusuario,
+                    widget.telefono,
+                    widget.modelo_auto,
+                    widget.placa_auto,
+                    formatted,
+                    currentTime,
+                    'Por Definir',
+                    'Por Definir',
                     widget.controlPagos);
 
-              print('RESPUESTA: ${responseApi.toJson()}');
+                print('RESPUESTA: ${responseApi.toJson()}');
 
-              if (responseApi.success) {
-                //  NotificationsService.showSnackbar(responseApi.message);
-              } else {
-                NotificationsService.showSnackbar(responseApi.message);
-              }
+                if (responseApi.success) {
+                  //  NotificationsService.showSnackbar(responseApi.message);
+                } else {
+                  NotificationsService.showSnackbar(responseApi.message);
+                }
 
-              final authService =
-                  Provider.of<AuthService>(context, listen: false);
+                final authService =
+                    Provider.of<AuthService>(context, listen: false);
 
-              await authService
-                  .crearsevicio(widget.idservicio); //Guardar el id del servicio
+                await authService.crearsevicio(
+                    widget.idservicio); //Guardar el id del servicio
 
-                  await authService
-                  .crearubicacio(widget.latitude.toString(), widget.longitude.toString()); 
+                await authService.crearubicacio(
+                    widget.latitude.toString(), widget.longitude.toString());
 
-                  print("llego aqui");
+                print("llego aqui");
 
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ParkingCodeScreen(
-                           direccion: widget.direccion,
-                      idparqueo: widget.idparqueo,
-                      imagenes: widget.imagenes,
-                      nombreparqueo: widget.nombreparqueo,
-                      idservicio: widget.idservicio,
-                      media_hora: widget.media_hora,
-                      hora: widget.hora,
-                      controlPagos: widget.controlPagos,
-                      idusuario: widget.idusuario,
-                      nombreusuario: widget.nombreusuario,
-                      telefono: widget.telefono,
-                      modelo_auto: widget.modelo_auto,
-                      placa_auto: widget.placa_auto,
-                      imagen_usuario: widget.imagen_usuario,
-                          latitude: widget.latitude,
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ParkingCodeScreen(
+                              direccion: widget.direccion,
+                              idparqueo: widget.idparqueo,
+                              imagenes: widget.imagenes,
+                              nombreparqueo: widget.nombreparqueo,
+                              idservicio: widget.idservicio,
+                              media_hora: widget.media_hora,
+                              hora: widget.hora,
+                              controlPagos: widget.controlPagos,
+                              idusuario: widget.idusuario,
+                              nombreusuario: widget.nombreusuario,
+                              telefono: widget.telefono,
+                              modelo_auto: widget.modelo_auto,
+                              placa_auto: widget.placa_auto,
+                              imagen_usuario: widget.imagen_usuario,
+                              latitude: widget.latitude,
                               longitude: widget.longitude,
-                      )));
-           }
+                            )));
+              } else {
+                print("no hay ");
+                //  NotificationsService.showSnackbar("TU QR PARA INICIAR NO HA SIDO ESCANEADO AÚN");
 
-          else{
-print("no hay ");
-              //  NotificationsService.showSnackbar("TU QR PARA INICIAR NO HA SIDO ESCANEADO AÚN");
-
-
-           }
-
-
+              }
             },
           ),
         ),
-
-        
-
-           
 
         //invoiceDetailsWidget(context),
       ],
     );
   }
 
- /* invoiceDetailsWidget(BuildContext context) {
+  /* invoiceDetailsWidget(BuildContext context) {
     final currentTime = DateFormat.Hm().format(DateTime.now());
 
     return Padding(

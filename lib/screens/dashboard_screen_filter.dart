@@ -119,7 +119,7 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
     return SafeArea(
       child: Scaffold(
           key: scaffoldKey,
-          drawer: Drawer(
+          /*  drawer: Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
@@ -284,7 +284,7 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                 ),
               ],
             ),
-          ),
+          ),*/
           body: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -342,7 +342,7 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
+                      /*GestureDetector(
                         onTap: () {
                           if (scaffoldKey.currentState.isDrawerOpen) {
                             scaffoldKey.currentState.openEndDrawer();
@@ -354,7 +354,7 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                           Icons.menu,
                           color: CustomColor.primaryColor,
                         ), //your button
-                      ),
+                      ),*/
                     ],
                   ),
                 )
@@ -544,6 +544,9 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                           /* isConfirm = !isConfirm;
                           print(isConfirm.toString());*/
 
+                          UsuarioApp user_app = UsuarioApp.fromJson(
+                              await _sharedPref.read('usuario_app') ?? {});
+
                           User user = User.fromJson(
                               await _sharedPref.read('user') ?? {});
 
@@ -560,6 +563,9 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                                         placa_auto: user.placaAuto,
                                         imagen_auto: user.imagenAuto,
                                         tipo_auto: user.tipoAuto,
+                                        nombre_usuario: user_app.nombre,
+                                        email_usuario: user_app.email,
+                                        foto_perfil: user_app.fotoPerfil,
                                       )));
                         });
                       },

@@ -6,6 +6,7 @@ import 'package:parkline/models/user.dart';
 import 'package:parkline/models/direccion.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:parkline/models/usuarios_app.dart';
 
 class UsuarioAppProvider {
   String _url = Enviroment.API_PARKIATE_KI;
@@ -60,6 +61,27 @@ Respuesta Postman
       Uri url = Uri.http(_url, '$_api/login');
       String bodyParams = json.encode({'email': email, 'password': password});
       //<llave, valoir>
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
+  Future<ResponseApi> getById(int id_usuario) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/getuser');
+
+      String bodyParams = json.encode({
+        'id_usuario': id_usuario,
+      });
+
       Map<String, String> headers = {'Content-type': 'application/json'};
 
       final res = await http.post(url, headers: headers, body: bodyParams);

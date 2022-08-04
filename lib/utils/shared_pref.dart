@@ -30,6 +30,10 @@ class SharedPref {
     await remove('user');
   }
 
+  void logout2() async {
+    await remove('usuario_app');
+  }
+
   /*Future<String> readToken() async {
     return await SharedPreferences.read(key: 'token') ?? '';
   }*/
