@@ -5,20 +5,20 @@ Visita visitafromJson(String str) => Visita.fromJson(json.decode(str));
 String visitaToJson(Visita data) => json.encode(data.toJson());
 
 class Visita {
-  Visita({
-    this.imgAuto,
-    this.numeroPlaca,
-    this.tiempoTotal,
-    this.timestampEntrada,
-    this.timestampSalida,
-    this.email,
-    this.telefono,
-    this.idVisita,
-    this.nombreParqueo,
-    this.direccion,
-    this.imagenParqueo,
-    this.tipoRegistro,
-  });
+  Visita(
+      {this.imgAuto,
+      this.numeroPlaca,
+      this.tiempoTotal,
+      this.timestampEntrada,
+      this.timestampSalida,
+      this.email,
+      this.telefono,
+      this.idVisita,
+      this.nombreParqueo,
+      this.direccion,
+      this.imagenParqueo,
+      this.tipoRegistro,
+      this.idParqueo});
 
   String imgAuto;
   String numeroPlaca;
@@ -32,23 +32,24 @@ class Visita {
   String direccion;
   String imagenParqueo;
   String tipoRegistro;
+  String idParqueo;
 
   List<Visita> toList = [];
 
   factory Visita.fromJson(Map<String, dynamic> json) => Visita(
-        imgAuto: json["img_auto"],
-        numeroPlaca: json["numero_placa"],
-        tiempoTotal: json["tiempo_total"],
-        timestampEntrada: (json["timestamp_entrada"]),
-        timestampSalida: (json["timestamp_salida"]),
-        email: json["email"],
-        telefono: json["telefono"],
-        idVisita: json["id_visita"],
-        nombreParqueo: json["nombre_parqueo"],
-        direccion: json["direccion"],
-        imagenParqueo: json["imagen_parqueo"],
-        tipoRegistro: json["tipo_registro"],
-      );
+      imgAuto: json["img_auto"],
+      numeroPlaca: json["numero_placa"],
+      tiempoTotal: json["tiempo_total"],
+      timestampEntrada: (json["timestamp_entrada"]),
+      timestampSalida: (json["timestamp_salida"]),
+      email: json["email"],
+      telefono: json["telefono"],
+      idVisita: json["id_visita"],
+      nombreParqueo: json["nombre_parqueo"],
+      direccion: json["direccion"],
+      imagenParqueo: json["imagen_parqueo"],
+      tipoRegistro: json["tipo_registro"],
+      idParqueo: json["id_parqueo"]);
 
   Visita.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
@@ -71,5 +72,6 @@ class Visita {
         "direccion": direccion,
         "imagen_parqueo": imagenParqueo,
         "tipo_registro": tipoRegistro,
+        "id_parqueo": idParqueo,
       };
 }

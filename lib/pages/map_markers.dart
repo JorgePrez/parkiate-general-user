@@ -22,17 +22,8 @@ import 'package:parkline/models/response_api.dart';
 ////AGREGANDO MARCARDAORES
 
 class MapMarkers extends StatefulWidget {
-  final String idusuario, nombreusuario, telefono, modelo_auto, placa_auto;
-  final String imagen_usuario;
-
   MapMarkers({
     Key key,
-    this.idusuario,
-    this.nombreusuario,
-    this.telefono,
-    this.modelo_auto,
-    this.placa_auto,
-    this.imagen_usuario,
   }) : super(key: key);
 
   @override

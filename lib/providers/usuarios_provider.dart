@@ -144,7 +144,7 @@ Respuesta Postman
 
   Future<String> uploadImage(String path) async {
     final url = Uri.parse(
-        'https://api.cloudinary.com/v1_1/parkiate-ki/image/upload?upload_preset=is-sales-preset');
+        'https://api.cloudinary.com/v1_1/parkiate-ki/image/upload?upload_preset=ipkmhg7m');
 
     final imageUploadRequest = http.MultipartRequest('POST', url);
 
@@ -170,7 +170,7 @@ Respuesta Postman
 
 //creando direcciones
 
-   Future<ResponseApi> createdireccion(Direccion direccion) async {
+  Future<ResponseApi> createdireccion(Direccion direccion) async {
     try {
       Uri url = Uri.http(_url, '$_api/createdirections');
       String bodyParams = json.encode(direccion);
@@ -187,9 +187,9 @@ Respuesta Postman
     }
   }
 
-  //obtener direcciones por usuario 
+  //obtener direcciones por usuario
 
-    Future<List<Direccion>> getDirections(String id_usuario) async {
+  Future<List<Direccion>> getDirections(String id_usuario) async {
     try {
       Uri url = Uri.http(_url, '$_api/getdirections');
 
@@ -211,6 +211,4 @@ Respuesta Postman
       return [];
     }
   }
-
-
 }

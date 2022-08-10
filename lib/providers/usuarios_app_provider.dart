@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:parkline/api/environment.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/user.dart';
+import 'package:parkline/models/autos_user.dart';
+
 import 'package:parkline/models/direccion.dart';
 
 import 'package:http/http.dart' as http;
@@ -95,23 +97,22 @@ Respuesta Postman
     }
   }
 
-  /*Future<ResponseApi> update(int id, String email, String nombre,
-      String telefono, String imagen) async {
+  Future<ResponseApi> update(
+      int id, String nombre, String telefono, String foto_perfil) async {
     try {
-      Uri url = Uri.http(_url, '$_api/update');
+      Uri url = Uri.http(_url, '$_api/modifyuser');
 
       String bodyParams = json.encode({
         'id': id,
-        'email': email,
         'nombre': nombre,
         'telefono': telefono,
-        'imagen': imagen
+        'foto_perfil': foto_perfil
       });
 
       //<llave, valoir>
       Map<String, String> headers = {'Content-type': 'application/json'};
 
-      final res = await http.put(url, headers: headers, body: bodyParams);
+      final res = await http.post(url, headers: headers, body: bodyParams);
       final data = json.decode(res.body);
 
       ResponseApi responseApi = ResponseApi.fromJson(data);
@@ -120,8 +121,56 @@ Respuesta Postman
       print('Error: $e');
       return null;
     }
-  }*/
+  }
 
+  Future<String> uploadImage(String path) async {
+    final url = Uri.parse(
+        'https://api.cloudinary.com/v1_1/parkiate-ki/image/upload?upload_preset=ipkmhg7m');
+
+    final imageUploadRequest = http.MultipartRequest('POST', url);
+
+    final file = await http.MultipartFile.fromPath('file', path);
+
+    imageUploadRequest.files.add(file);
+
+    final streamedResponse = await imageUploadRequest.send();
+    final resp = await http.Response.fromStream(streamedResponse);
+
+    if (resp.statusCode != 200 && resp.statusCode != 201) {
+      print('Algo salio mal al registrar la imagen');
+      print(resp.body);
+      return null;
+    }
+
+    final decodedData = json.decode(resp.body);
+
+    return decodedData['secure_url'];
+
+    //   print(resp.body);
+  }
+
+  Future<List<AutosUser>> getAutos(String id_usuario) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/autosbyuser');
+
+      String bodyParams = json.encode({
+        'id_usuario': id_usuario,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      print(data);
+
+      AutosUser autosUser = AutosUser.fromJsonList(data);
+      print(autosUser.toList);
+      return autosUser.toList;
+    } catch (e) {
+      print('Error: $e');
+      return [];
+    }
+  }
 /*
   Future<ResponseApi> getById(int id_usuario) async {
     try {

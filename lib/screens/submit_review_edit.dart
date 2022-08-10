@@ -15,27 +15,28 @@ import 'package:intl/intl.dart';
 
 import 'package:parkline/providers/resenias_provider.dart';
 
-class SubmitReviewScreen extends StatefulWidget {
-  final String idusuario, idparqueo, nombreusuario, imagenusuario;
-  //double rating = 5.0;
+class SubmitReviewEdit extends StatefulWidget {
+  final String idusuario, idparqueo, comentario, imagenusuario;
+  final double rating;
 
-  SubmitReviewScreen(
+  SubmitReviewEdit(
       {Key key,
       this.idusuario,
       this.idparqueo,
-      this.nombreusuario,
-      this.imagenusuario})
+      this.comentario,
+      this.imagenusuario,
+      this.rating})
       : super(key: key);
 
   @override
-  _SubmitReviewScreenState createState() => _SubmitReviewScreenState();
+  _SubmitReviewEditState createState() => _SubmitReviewEditState();
 }
 
-class _SubmitReviewScreenState extends State<SubmitReviewScreen> {
+class _SubmitReviewEditState extends State<SubmitReviewEdit> {
   TextEditingController commentController = TextEditingController();
+
   UsuarioProvider usuarioProvider = new UsuarioProvider();
   double valoracion = 5.0;
-  double rating = 5.0;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +52,8 @@ class _SubmitReviewScreenState extends State<SubmitReviewScreen> {
   }
 
   bodyWidget(BuildContext context) {
+    double rating = widget.rating;
+
     final DateTime now = DateTime.now();
 
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
@@ -63,6 +66,21 @@ class _SubmitReviewScreenState extends State<SubmitReviewScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: Dimensions.heightSize * 3),
+        Padding(
+          padding: EdgeInsets.only(
+              left: Dimensions.marginSize,
+              right: Dimensions.marginSize,
+              top: Dimensions.heightSize * 1), //2
+          child: GestureDetector(
+            child: Icon(
+              Icons.arrow_back,
+              color: CustomColor.primaryColor,
+            ),
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
         Padding(
           padding: EdgeInsets.only(
             left: Dimensions.marginSize,
@@ -148,7 +166,7 @@ class _SubmitReviewScreenState extends State<SubmitReviewScreen> {
               SizedBox(height: Dimensions.heightSize),
               TextFormField(
                 style: CustomStyle.textStyle,
-                controller: commentController,
+                controller: commentController..text = widget.comentario,
                 keyboardType: TextInputType.name,
                 validator: (String value) {
                   if (value.isEmpty) {
@@ -192,7 +210,7 @@ class _SubmitReviewScreenState extends State<SubmitReviewScreen> {
                           Radius.circular(Dimensions.radius * 0.5))),
                   child: Center(
                     child: Text(
-                      'Enviar Reseña'.toUpperCase(),
+                      'Editar Reseña'.toUpperCase(),
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: Dimensions.largeTextSize,
@@ -204,8 +222,6 @@ class _SubmitReviewScreenState extends State<SubmitReviewScreen> {
                   String comentario = commentController.text.trim();
                   print('Comentario: $comentario');
 
-                  print('rating: $rating');
-
                   Resenia_app resenia = new Resenia_app(
                       idUsuarioMovil: widget.idusuario,
                       idParqueo: widget.idparqueo,
@@ -213,7 +229,7 @@ class _SubmitReviewScreenState extends State<SubmitReviewScreen> {
                       comentario: comentario);
 
                   ResponseApi responseApir =
-                      await reseniasProvider.create_review(resenia);
+                      await reseniasProvider.create_update(resenia);
 
                   if (responseApir.success) {
                     ResponseApi responseApi = await usuarioProvider.login(
@@ -257,5 +273,3 @@ class _SubmitReviewScreenState extends State<SubmitReviewScreen> {
     );
   }
 }
-
-mixin SharedPref {}

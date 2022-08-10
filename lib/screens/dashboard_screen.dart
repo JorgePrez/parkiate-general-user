@@ -1,5 +1,6 @@
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
+import 'package:parkline/models/autos_user.dart';
 import 'package:parkline/models/direccion.dart';
 import 'package:parkline/models/servicioadmin.dart';
 import 'package:parkline/models/user.dart';
@@ -18,9 +19,12 @@ import 'package:parkline/providers/usuarios_provider.dart';
 import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/dashboard/direction_history_screen.dart';
 import 'package:parkline/screens/dashboard/filter.dart';
+import 'package:parkline/screens/dashboard/my_account_screen_edit.dart';
 import 'package:parkline/screens/dashboard/parking_history_screen_full.dart';
+import 'package:parkline/screens/dashboard/vehicles_list.dart';
 import 'package:parkline/screens/dashboard_screen_filter.dart';
 import 'package:parkline/screens/parking_code_screen_details2.dart';
+import 'package:parkline/screens/parking_code_screen_details_review.dart';
 import 'package:parkline/services/parqueos_service.dart';
 import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/custom_style.dart';
@@ -39,6 +43,7 @@ import 'package:parkline/screens/onboard/on_board_screen.dart';
 import 'package:parkline/pages/map_markers.dart';
 import 'package:provider/provider.dart';
 import 'package:parkline/widgets/color_button.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 String selectedVehicle = 'assets/images/vehicle/filter.png';
 String selectedVehicle2;
@@ -160,10 +165,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Parqueo Actual [Unicamente con código QR escaneado] ',
+                    'Parqueo actual [unicamente con código QR escaneado] ',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.local_parking_outlined),
+                  trailing: Icon(Icons.qr_code_2_sharp),
                   onTap: () async {
                     UsuarioApp user_app = UsuarioApp.fromJson(
                         await _sharedPref.read('usuario_app') ?? {});
@@ -229,7 +234,134 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Historial de Visitas a Parqueos',
+                    'Recientemente finalizado ',
+                    style: CustomStyle.listStyle,
+                  ),
+                  trailing: Icon(Icons.local_parking_outlined),
+                  onTap: () async {
+                    UsuarioApp user_app = UsuarioApp.fromJson(
+                        await _sharedPref.read('usuario_app') ?? {});
+
+                    ResponseApi user_app_true = await usuarioAppProvider
+                        .getById(int.parse(user_app.id)); //○8
+
+                    UsuarioApp user2 = UsuarioApp.fromJson(user_app_true.data);
+
+                    List<Visita> lista_visitas =
+                        await visitasProvider.getrecenct(user2.id);
+
+                    if (lista_visitas.length > 0) {
+                      List<String> hora_temporal =
+                          lista_visitas[0].tiempoTotal.split('-');
+
+                      String dia_t = hora_temporal[0];
+                      String hora_t = hora_temporal[1];
+                      String minuto_t = hora_temporal[2];
+
+                      if (int.parse(dia_t) > 0) {
+                        dia_t = (int.parse(dia_t)).toString();
+
+                        if (int.parse(dia_t) == 1) {
+                          dia_t = '${dia_t} dìa';
+                        } else {
+                          dia_t = '${dia_t} dìas';
+                        }
+                      } else {
+                        dia_t = '';
+                      }
+
+                      if (int.parse(hora_t) > 0) {
+                        hora_t = (int.parse(hora_t)).toString();
+
+                        if (int.parse(hora_t) == 1) {
+                          hora_t = '${hora_t} hora';
+                        } else {
+                          hora_t = '${hora_t} horas';
+                        }
+                      } else {
+                        hora_t = '';
+                      }
+
+                      if (int.parse(minuto_t) > 0) {
+                        minuto_t = (int.parse(minuto_t)).toString();
+
+                        minuto_t = '${minuto_t} minutos';
+                      } else {
+                        minuto_t = '${1} minuto';
+                      }
+
+                      String tiempo_total = '${dia_t} ${hora_t} ${minuto_t}';
+
+                      String temporal_fecha_E =
+                          lista_visitas[0].timestampEntrada.substring(1, 11);
+                      String temporal_hora_E =
+                          lista_visitas[0].timestampEntrada.substring(11);
+
+                      String hora_E = temporal_hora_E.substring(0, 5);
+
+                      List<String> temporal_fechaE_slipt =
+                          temporal_fecha_E.split('-');
+
+                      String dia_e = temporal_fechaE_slipt[2].trim();
+                      String mes_e = temporal_fechaE_slipt[1];
+                      String anio_e = temporal_fechaE_slipt[0];
+
+                      String fecha_E = '${dia_e}/${mes_e}/${anio_e}';
+                      String entrada = '${hora_E} - $fecha_E';
+
+                      String temporal_fecha_S =
+                          lista_visitas[0].timestampSalida.substring(1, 11);
+                      String temporal_hora_S =
+                          lista_visitas[0].timestampSalida.substring(11);
+
+                      String hora_S = temporal_hora_S.substring(0, 5);
+
+                      List<String> temporal_fechaS_slipt =
+                          temporal_fecha_S.split('-');
+
+                      String dia_s = temporal_fechaS_slipt[2].trim();
+                      String mes_s = temporal_fechaS_slipt[1];
+                      String anio_s = temporal_fechaS_slipt[0];
+
+                      String fecha_S = '${dia_s}/${mes_s}/${anio_s}';
+
+                      String salida = '${hora_S} - $fecha_S';
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ParkingCodeScreenDetailsReview(
+                                      img_auto: lista_visitas[0].imgAuto,
+                                      numero_placa:
+                                          lista_visitas[0].numeroPlaca,
+                                      tiempo_total: tiempo_total,
+                                      timestamp_entrada: entrada,
+                                      timestamp_salida: salida,
+                                      email: lista_visitas[0].email,
+                                      telefono: lista_visitas[0].telefono,
+                                      id_visita: lista_visitas[0].idVisita,
+                                      nombre_parqueo:
+                                          lista_visitas[0].nombreParqueo,
+                                      direccion: lista_visitas[0].direccion,
+                                      id_parqueo: lista_visitas[0].idParqueo,
+                                      usuario_id: user_app.id)));
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: Dimensions.marginSize,
+                      right: Dimensions.marginSize),
+                  child: Divider(
+                    color: Colors.black.withOpacity(0.4),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Historial de visitas a parqueos',
                     style: CustomStyle.listStyle,
                   ),
                   trailing: Icon(Icons.history),
@@ -258,50 +390,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Historial de Parqueos OLD',
+                    'Mi cuenta',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.history),
+                  trailing: Icon(FontAwesomeIcons.userAlt),
                   onTap: () async {
-                    List<Servicioadmin> lista =
-                        await serviciosProvider.userhistory(widget.id);
+                    UsuarioApp user_app = UsuarioApp.fromJson(
+                        await _sharedPref.read('usuario_app') ?? {});
 
-                    print(lista);
+                    ResponseApi user_app_true = await usuarioAppProvider
+                        .getById(int.parse(user_app.id)); //○8
+
+                    UsuarioApp user2 = UsuarioApp.fromJson(user_app_true.data);
 
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            ParkingHistoryScreen(listaservicios: lista)));
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Mi Cuenta',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.account_box),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MyAccountScreen(
-                              id: widget.id,
-                              email: widget.email,
-                              nombre: widget.nombre,
-                              telefono: widget.telefono,
-                              imagen: widget.imagen,
-                              session_token: widget.session_token,
-                              modelo_auto: widget.modelo_auto,
-                              placa_auto: widget.placa_auto,
-                              imagen_auto: widget.imagen_auto,
-                              tipo_auto: widget.tipo_auto,
+                        builder: (context) => MyAccountScreenEdit(
+                              id: user2.id,
+                              email: user2.email,
+                              nombre: user2.nombre,
+                              telefono: user2.telefono,
+                              fotoperfil: user2.fotoPerfil,
+                              timestampCreacion: user2.timestampCreacion,
+                              idVisitaActual: user2.idVisitaActual,
                             )));
                   },
                 ),
@@ -315,10 +426,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    'Mi Vehículo',
+                    'Mis vehículos',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.airport_shuttle_outlined),
+                  trailing: Icon(FontAwesomeIcons.carAlt),
+                  onTap: () async {
+                    UsuarioApp user_app = UsuarioApp.fromJson(
+                        await _sharedPref.read('usuario_app') ?? {});
+
+                    print('Usuario_app: ${user_app.toJson()}');
+
+                    List<AutosUser> lista_autos =
+                        await usuarioAppProvider.getAutos(user_app.id);
+
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            VehiclesList(listaautos: lista_autos)));
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: Dimensions.marginSize,
+                      right: Dimensions.marginSize),
+                  child: Divider(
+                    color: Colors.black.withOpacity(0.4),
+                  ),
+                ),
+                /* ListTile(
+                  title: Text(
+                    'Mis vehículos true',
+                    style: CustomStyle.listStyle,
+                  ),
+                  trailing: Icon(FontAwesomeIcons.carAlt),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).push(MaterialPageRoute(
@@ -339,7 +479,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Divider(
                     color: Colors.black.withOpacity(0.4),
                   ),
-                ),
+                ),*/
                 ListTile(
                   title: Text(
                     'Mis direcciones',
@@ -410,6 +550,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     //   Navigator.pushReplacementNamed(context, 'signin');
 
                     _sharedPref.logout();
+                    _sharedPref.logout2();
 
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => OnBoardScreen()));
@@ -438,14 +579,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   /*   child: MapaPageCopy(
                    )*/
 
-                  child: MapMarkers(
-                    idusuario: widget.id,
-                    nombreusuario: widget.nombre,
-                    telefono: widget.telefono,
-                    modelo_auto: widget.modelo_auto,
-                    placa_auto: widget.placa_auto,
-                    imagen_usuario: widget.imagen,
-                  ),
+                  child: MapMarkers(),
 
                   /*child: MapMarkers(
                       idusuario: widget.id,
@@ -508,7 +642,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   profileWidget(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: Dimensions.heightSize * 3,
+        top: Dimensions.heightSize * 3, //3
       ),
       child: ListTile(
         leading: Image.network(

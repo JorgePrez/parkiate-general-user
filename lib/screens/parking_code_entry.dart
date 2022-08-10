@@ -1,5 +1,13 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:parkline/models/bservicios.dart';
+import 'package:parkline/models/usuarios_app.dart';
+import 'package:parkline/models/visita_actual.dart';
+import 'package:parkline/providers/usuarios_app_provider.dart';
+import 'package:parkline/providers/visitas_provider.dart';
+import 'package:parkline/screens/parking_code_screen_details2.dart';
+import 'package:parkline/screens/parking_code_screen_init.dart';
+import 'package:parkline/utils/shared_pref.dart';
 import 'package:provider/provider.dart';
 
 import 'package:qr_flutter/qr_flutter.dart';
@@ -78,8 +86,12 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
   }
 
   bodyWidget(BuildContext context) {
+    final UsuarioAppProvider usuarioAppProvider = new UsuarioAppProvider();
+    SharedPref _sharedPref = new SharedPref();
     final ServiciosadminProvider serviciosadminProvider =
         new ServiciosadminProvider();
+
+    final VisitasProvider visitasProvider = new VisitasProvider();
 
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
@@ -94,7 +106,9 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
     String direccion_registro =
         'https://${_url}/Parkiate-web/registrar_desde_app.php?id_parqueo=${widget.idparqueo}&id_usuario=${widget.idusuario}';
 
+    var image = Image.asset('assets/simplereal.png');
     // dynamic currentTime = DateFormat.Hm().format(DateTime.now());
+    //TODO: pantallas de diferentes tamano
 
     //final currentTime = DateFormat.Hm().format(DateTime.now()); //dinamic
     return Column(
@@ -106,9 +120,8 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
               right: Dimensions.marginSize,
               top: Dimensions.heightSize * 1), //2
         ),
-        SizedBox(
-          height: Dimensions.heightSize * 1.5, //2
-        ),
+        SizedBox(height: Dimensions.heightSize * 1 //1.5, //2
+            ),
         Container(
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -136,7 +149,7 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                         .marginSize,
                     right: Dimensions.marginSize),
                 child: Text(
-                  'Presenta este QR al encargado del parqueo (en el momento en que este QR sea escaneado el tiempo se comenzará a contar) ',
+                  'Puedes colocar este QR debajo del dispositivo lector del parqueo, o bien presentarlo al encargado del parqueo para ser escaneado',
                   style: TextStyle(
                       fontSize: Dimensions.largeTextSize,
                       fontWeight: FontWeight.bold,
@@ -144,6 +157,28 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                 ),
               ),
               SizedBox(height: Dimensions.heightSize),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                //Ajuste para pantallas pequeñas.....
+                GestureDetector(
+                  onTap: () async {},
+                  child: Center(
+                    child: Image.network(
+                      'https://res.cloudinary.com/parkiate-ki/image/upload/v1659642981/detalles/DQ-Mini-lectura-codigo-QR_Kimaldi_1_ygrlyi.jpg',
+                      height: 175.0,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () async {},
+                  child: Center(
+                    child: Image.network(
+                      'https://res.cloudinary.com/parkiate-ki/image/upload/v1659643984/detalles/5-mejores-escaneres-qr-para-telefonos-inteligentes-android_rdxvgy.jpg',
+                      height: 175.0,
+                    ),
+                  ),
+                ),
+              ]),
+              SizedBox(height: Dimensions.heightSize * 3),
               GestureDetector(
                 onTap: () async {},
                 child: Center(
@@ -173,13 +208,13 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                       color: Colors.black),
                 ),*/
               ),
-              SizedBox(height: Dimensions.heightSize),
+              //  SizedBox(height: Dimensions.heightSize),/////////////
             ],
           ),
         ),
-        SizedBox(
-          height: Dimensions.heightSize * 1.5, //2
-        ),
+        /*SizedBox(
+          height: Dimensions.heightSize, //2
+        ),*/
 
         Padding(
           padding: const EdgeInsets.only(
@@ -194,7 +229,7 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                       Radius.circular(Dimensions.radius * 0.5))),
               child: Center(
                 child: Text(
-                  'Mi QR (de inicio) ha sido escaneado',
+                  'Ver resultado de código QR',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: Dimensions.largeTextSize,
@@ -203,7 +238,63 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
               ),
             ),
             onTap: () async {
+              UsuarioApp user_app = UsuarioApp.fromJson(
+                  await _sharedPref.read('usuario_app') ?? {});
+
+              ResponseApi user_app_true =
+                  await usuarioAppProvider.getById(int.parse(user_app.id)); //○8
+
+              UsuarioApp user2 = UsuarioApp.fromJson(user_app_true.data);
+
+              print(user2.toJson());
+
+              String visita_app = user2.idVisitaActual;
+
+              if (!(visita_app == 'N')) {
+                Visitactual visita_actual =
+                    await visitasProvider.getById(user_app.id, visita_app);
+
+                print('Usuario_app: ${visita_actual.toJson()}');
+
+                String temporal_fecha_E =
+                    visita_actual.timestampEntrada.substring(1, 11);
+                String temporal_hora_E =
+                    visita_actual.timestampEntrada.substring(11);
+
+                String hora_E = temporal_hora_E.substring(0, 5);
+
+                List<String> temporal_fechaE_slipt =
+                    temporal_fecha_E.split('-');
+
+                String dia_e = temporal_fechaE_slipt[2].trim();
+                String mes_e = temporal_fechaE_slipt[1];
+                String anio_e = temporal_fechaE_slipt[0];
+
+                String fecha_E = '${dia_e}/${mes_e}/${anio_e}';
+                String entrada = '${hora_E} - $fecha_E';
+
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ParkingCodeScreenDetailsInit(
+                            img_auto: visita_actual.imgAuto,
+                            numero_placa: visita_actual.numeroPlaca,
+                            timestamp_entrada: entrada,
+                            email: visita_actual.email,
+                            telefono: visita_actual.telefono,
+                            id_visita: visita_actual.idVisitactual,
+                            nombre_parqueo: visita_actual.nombreParqueo,
+                            direccion: visita_actual.direccion,
+                            latitude: visita_actual.latitude,
+                            longitude: visita_actual.longitude)));
+              } else {
+                return showInfoFlushbar(context);
+              }
               //BUSCAR EL ID, si este existe va a permitir navegar sino va a mostrar el banner
+
+              /*   NotificationsService.showSnackbar(
+                  "TU QR PARA INICIAR NO HA SIDO ESCANEADO AÚN");*/
+              /*
 
               final ServiciosadminProvider serviciosProvider =
                   new ServiciosadminProvider();
@@ -281,7 +372,7 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                 print("no hay ");
                 //  NotificationsService.showSnackbar("TU QR PARA INICIAR NO HA SIDO ESCANEADO AÚN");
 
-              }
+              }*/
             },
           ),
         ),
@@ -290,227 +381,19 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
       ],
     );
   }
+}
 
-  /* invoiceDetailsWidget(BuildContext context) {
-    final currentTime = DateFormat.Hm().format(DateTime.now());
-
-    return Padding(
-      padding: const EdgeInsets.only(
-          left: Dimensions.marginSize, right: Dimensions.marginSize),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Nombre',
-                      style: CustomStyle.textStyle,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      widget.nombreusuario,
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Telefono',
-                      style: CustomStyle.textStyle,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      widget.telefono,
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: Dimensions.heightSize),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Id del Parqueo',
-                      style: CustomStyle.textStyle,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      widget.idparqueo,
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Id Servicio',
-                      style: CustomStyle.textStyle,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      widget.idservicio,
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: Dimensions.heightSize),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Modelo del vehículo',
-                      style: CustomStyle.textStyle,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      widget.modelo_auto, //Strings.demoModelNo,
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Número de Placa',
-                      style: CustomStyle.textStyle,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      widget.placa_auto, // Strings.demoPlateNo,
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: Dimensions.heightSize),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hora de llegada:',
-                      style: CustomStyle.textStyle,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      currentTime, // 'Por determinar', //'Today , 12:00 pm
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Hora de Salida:',
-                      style: CustomStyle.textStyle,
-                    ),
-                    SizedBox(
-                      height: Dimensions.heightSize * 0.5,
-                    ),
-                    Text(
-                      'Por definir', // 'Por determinar', // Today 3.00 PM
-                      style: TextStyle(
-                          fontSize: Dimensions.defaultTextSize,
-                          color: CustomColor.primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: Dimensions.heightSize),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Dirección del Parqueo',
-                style: CustomStyle.textStyle,
-              ),
-              SizedBox(
-                height: Dimensions.heightSize * 0.5,
-              ),
-              Text(
-                widget.direccion,
-                style: TextStyle(
-                    fontSize: Dimensions.defaultTextSize,
-                    color: CustomColor.primaryColor),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  } */
+void showInfoFlushbar(BuildContext context) {
+  Flushbar(
+    title: 'Tu código aún no ha sido escaneado',
+    message:
+        'Para avanzar a la siguiente pantalla tú código debe ser escaneado',
+    icon: Icon(
+      Icons.info_outline,
+      size: 28,
+      color: Colors.blue.shade300,
+    ),
+    leftBarIndicatorColor: Colors.blue.shade300,
+    duration: Duration(seconds: 3),
+  )..show(context);
 }
