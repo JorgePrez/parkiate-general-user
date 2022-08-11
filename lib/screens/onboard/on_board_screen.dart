@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parkline/models/usuarios_app.dart';
+import 'package:parkline/screens/parking_code_entry.dart';
+import 'package:parkline/screens/parking_code_entry_storage.dart';
 import 'package:parkline/utils/dimensions.dart';
 import 'package:parkline/utils/colors.dart';
 import 'data.dart';
@@ -120,39 +122,37 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                                 onTap: () async {
                                   //obteniedo el usuario si es que ya esta almacenado en shared prefence
 
-                                  User user = User.fromJson(
-                                      await _sharedPref.read('user') ?? {});
-
                                   UsuarioApp user_app = UsuarioApp.fromJson(
                                       await _sharedPref.read('usuario_app') ??
                                           {});
 
-                                  print('Usuario: ${user.toJson()}');
+                                  if (user_app.id != null) {
+                                    String id_parqueo_qr = await _sharedPref
+                                            .read('id_parqueo_qr') ??
+                                        '';
 
-                                  print('Usuario: ${user_app.toJson()}');
-
-                                  if (user?.sessionToken != null) {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashboardScreen(
-                                                  id: user.id,
-                                                  email: user.email,
-                                                  nombre: user.nombre,
-                                                  telefono: user.telefono,
-                                                  imagen: user.imagen,
-                                                  session_token:
-                                                      user.sessionToken,
-                                                  modelo_auto: user.modeloAuto,
-                                                  placa_auto: user.placaAuto,
-                                                  imagen_auto: user.imagenAuto,
-                                                  tipo_auto: user.tipoAuto,
-                                                  nombre_usuario:
-                                                      user_app.nombre,
-                                                  email_usuario: user_app.email,
-                                                  foto_perfil:
-                                                      user_app.fotoPerfil,
-                                                )));
+                                    if (id_parqueo_qr.length > 1) {
+                                      Navigator.of(context)
+                                          .pushReplacement(MaterialPageRoute(
+                                        builder: (context) =>
+                                            ParkingCodeScreenEntryStorage(
+                                                //ruta intermedia
+                                                idparqueo: id_parqueo_qr,
+                                                idusuario: user_app.id),
+                                      ));
+                                    } else {
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DashboardScreen(
+                                                    nombre_usuario:
+                                                        user_app.nombre,
+                                                    email_usuario:
+                                                        user_app.email,
+                                                    foto_perfil:
+                                                        user_app.fotoPerfil,
+                                                  )));
+                                    }
                                   } else {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(

@@ -119,172 +119,6 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
     return SafeArea(
       child: Scaffold(
           key: scaffoldKey,
-          /*  drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  child: profileWidget(context),
-                  decoration: BoxDecoration(
-                    color: CustomColor.primaryColor,
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Historial de Parqueos',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.history),
-                  onTap: () async {
-                    List<Servicioadmin> lista =
-                        await serviciosProvider.userhistory(widget.id);
-
-                    print(lista);
-
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            ParkingHistoryScreen(listaservicios: lista)));
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Mi Cuenta',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.account_box),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MyAccountScreen(
-                              id: widget.id,
-                              email: widget.email,
-                              nombre: widget.nombre,
-                              telefono: widget.telefono,
-                              imagen: widget.imagen,
-                              session_token: widget.session_token,
-                              modelo_auto: widget.modelo_auto,
-                              placa_auto: widget.placa_auto,
-                              imagen_auto: widget.imagen_auto,
-                              tipo_auto: widget.tipo_auto,
-                            )));
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Mi Vehículo',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.airport_shuttle_outlined),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AddVehicleScreen(
-                              id: widget.id,
-                              email: widget.email,
-                              modelo_auto: widget.modelo_auto,
-                              placa_auto: widget.placa_auto,
-                              imagen_auto: widget.imagen_auto,
-                              tipo_auto: widget.tipo_auto,
-                            )));
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Mis direcciones',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.add_location_outlined),
-                  onTap: () async {
-                    UsuarioProvider usuarioProvider = new UsuarioProvider();
-
-                    List<Direccion> lista =
-                        await usuarioProvider.getDirections(widget.id);
-
-                    print(lista);
-
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => DirectionHistoryScreen(
-                            listaservicios: lista, id_usuario: widget.id)));
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    "Regresar a Dashboard",
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.person_search_outlined),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'CERRAR SESIÓN',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(Icons.logout),
-                  onTap: () {
-                    //   Navigator.pushReplacementNamed(context, 'signin');
-
-                    _sharedPref.logout();
-
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OnBoardScreen()));
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),
-              ],
-            ),
-          ),*/
           body: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -297,14 +131,7 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                   /*   child: MapaPageCopy(
                    )*/
 
-                  child: MapMarkersSearch(
-                      idusuario: widget.id,
-                      nombreusuario: widget.nombre,
-                      telefono: widget.telefono,
-                      modelo_auto: widget.modelo_auto,
-                      placa_auto: widget.placa_auto,
-                      imagen_usuario: widget.imagen,
-                      listadito: listaconcidencias),
+                  child: MapMarkersSearch(listadito: listaconcidencias),
 
                   /*child: MapMarkers(
                       idusuario: widget.id,
@@ -547,22 +374,9 @@ class _DashboardScreenFilterState extends State<DashboardScreenFilter> {
                           UsuarioApp user_app = UsuarioApp.fromJson(
                               await _sharedPref.read('usuario_app') ?? {});
 
-                          User user = User.fromJson(
-                              await _sharedPref.read('user') ?? {});
-
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
                                   builder: (context) => DashboardScreen(
-                                        id: user.id,
-                                        email: user.email,
-                                        nombre: user.nombre,
-                                        telefono: user.telefono,
-                                        imagen: user.imagen,
-                                        session_token: user.sessionToken,
-                                        modelo_auto: user.modeloAuto,
-                                        placa_auto: user.placaAuto,
-                                        imagen_auto: user.imagenAuto,
-                                        tipo_auto: user.tipoAuto,
                                         nombre_usuario: user_app.nombre,
                                         email_usuario: user_app.email,
                                         foto_perfil: user_app.fotoPerfil,

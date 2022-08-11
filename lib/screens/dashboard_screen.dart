@@ -551,6 +551,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                     _sharedPref.logout();
                     _sharedPref.logout2();
+                    _sharedPref.removeqr();
 
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => OnBoardScreen()));
@@ -580,14 +581,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                    )*/
 
                   child: MapMarkers(),
-
-                  /*child: MapMarkers(
-                      idusuario: widget.id,
-                      nombreusuario: widget.nombre,
-                      telefono: widget.telefono,
-                      modelo_auto: widget.modelo_auto,
-                      placa_auto: widget.placa_auto,
-                      imagen_usuario: widget.imagen),*/
                 ),
                 DraggableScrollableSheet(
                   builder: (context, scrollController) {
@@ -642,9 +635,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   profileWidget(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: Dimensions.heightSize * 3, //3
+        top: Dimensions.heightSize * 1, //3
       ),
-      child: ListTile(
+      child: /*istTile(
         leading: Image.network(
           widget.foto_perfil,
         ),
@@ -662,6 +655,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
             fontSize: Dimensions.defaultTextSize,
           ),
         ),
+      ),*/
+
+          Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 1, //1
+            child: GestureDetector(
+              onTap: () {},
+              child: Image.network(widget.foto_perfil),
+            ),
+          ),
+          Expanded(
+            flex: 2, //
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center, //.start
+              children: [
+                SizedBox(height: Dimensions.heightSize * 0.5), //heightSize
+                Text(
+                  '${widget?.nombre_usuario ?? ''}',
+                  style: TextStyle(
+                      fontSize: Dimensions.largeTextSize,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: Dimensions.heightSize * 0.5), //0.5
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center, //-staert
+                  children: [
+                    Text(
+                      '${widget?.email_usuario ?? ''}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: Dimensions.defaultTextSize,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -873,11 +909,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
               // print(resultfiltrados);
 
-              User user = User.fromJson(await _sharedPref.read('user') ?? {});
+              //  User user = User.fromJson(await _sharedPref.read('user') ?? {});
 
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => DashboardScreenFilter(
-                        id: user.id,
+                        /* id: user.id,
                         email: user.email,
                         nombre: user.nombre,
                         telefono: user.telefono,
@@ -886,7 +922,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         modelo_auto: user.modeloAuto,
                         placa_auto: user.placaAuto,
                         imagen_auto: user.imagenAuto,
-                        tipo_auto: user.tipoAuto,
+                        tipo_auto: user.tipoAuto,*/
                         listaconcidencias: resultfiltrados,
                       )));
 
@@ -925,10 +961,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     GestureDetector(
                       child: Icon(Icons.arrow_back),
                       onTap: () async {
-                        User user =
-                            User.fromJson(await _sharedPref.read('user') ?? {});
+                        /*    User user =
+                            User.fromJson(await _sharedPref.read('user') ?? {});*/
+
+                        UsuarioApp user_app = UsuarioApp.fromJson(
+                            await _sharedPref.read('usuario_app') ?? {});
 
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => DashboardScreen(
+                                  nombre_usuario: user_app.nombre,
+                                  email_usuario: user_app.email,
+                                  foto_perfil: user_app.fotoPerfil,
+                                )));
+
+                        /*  Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => DashboardScreen(
                                   id: user.id,
                                   email: user.email,
@@ -940,7 +986,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   placa_auto: user.placaAuto,
                                   imagen_auto: user.imagenAuto,
                                   tipo_auto: user.tipoAuto,
-                                )));
+                                )));*/
                         /*setState(() {
                           isConfirm = !isConfirm;
                           print(isConfirm.toString());

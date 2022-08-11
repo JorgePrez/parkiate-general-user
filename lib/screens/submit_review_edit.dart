@@ -232,11 +232,6 @@ class _SubmitReviewEditState extends State<SubmitReviewEdit> {
                       await reseniasProvider.create_update(resenia);
 
                   if (responseApir.success) {
-                    ResponseApi responseApi = await usuarioProvider.login(
-                        'jensen@gmail.com', '579!!Oo296');
-
-                    User user = User.fromJson(responseApi.data);
-
                     ResponseApi user_app_true = await usuarioAppProvider
                         .getById(int.parse(widget.idusuario)); //○8
 
@@ -244,16 +239,6 @@ class _SubmitReviewEditState extends State<SubmitReviewEdit> {
 
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => DashboardScreen(
-                              id: user.id,
-                              nombre: user.nombre,
-                              telefono: user.telefono,
-                              email: user.email,
-                              imagen: user.imagen,
-                              session_token: user.sessionToken,
-                              modelo_auto: user.modeloAuto,
-                              placa_auto: user.placaAuto,
-                              imagen_auto: user.imagenAuto,
-                              tipo_auto: user.tipoAuto,
                               nombre_usuario: user2.nombre,
                               email_usuario: user2.email,
                               foto_perfil: user2.fotoPerfil,

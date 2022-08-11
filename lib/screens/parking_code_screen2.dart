@@ -10,6 +10,8 @@ import 'package:parkline/models/user.dart';
 import 'package:parkline/providers/serviciosadmin_provider.dart';
 import 'package:parkline/models/servicioadmin.dart';
 
+//TODO: VER QUE SE HACE CUANDO NO EXISTEN QR.
+
 class ParkingCodeScreen2 extends StatefulWidget {
   final String direccion,
       idparqueo,

@@ -14,6 +14,7 @@ import 'package:parkline/utils/colors.dart';
 import 'package:parkline/screens/submit_review_screen.dart';
 import 'package:provider/provider.dart';
 
+//TODO: no esta en uso.
 
 class PaymentScreen extends StatefulWidget {
   final String idservicio, precio, idusuario, idparqueo;
@@ -267,65 +268,54 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               ),
               onTap: () async {
-
-
-
-                final ParqueosProvider parqueosProvider = new ParqueosProvider();
+                final ParqueosProvider parqueosProvider =
+                    new ParqueosProvider();
                 final UsuarioProvider usuarioProvider = new UsuarioProvider();
 
+                ResponseApi responseApiespacios = await parqueosProvider
+                    .getreviews(widget.idparqueo, widget.nombreusuario);
 
+                Fresenias fresenias =
+                    Fresenias.fromJson(responseApiespacios.data);
 
-                ResponseApi responseApiespacios =
-                await parqueosProvider.getreviews(widget.idparqueo, widget.nombreusuario);
+                String ocupados = fresenias.cantidadResenias;
+                int cantidadDeResenias = int.parse(ocupados);
 
-            Fresenias fresenias = Fresenias.fromJson(responseApiespacios.data);
-
-            String ocupados = fresenias.cantidadResenias;
-            int cantidadDeResenias =int.parse(ocupados);
-
-                  if(cantidadDeResenias>0){
-
-                      final authService =
+                if (cantidadDeResenias > 0) {
+                  final authService =
                       Provider.of<AuthService>(context, listen: false);
 
                   await authService.logout2();
 
-                       await authService.clear_latitude();
+                  await authService.clear_latitude();
 
                   await authService.clear_longitude();
 
+                  ResponseApi responseApi2 = await usuarioProvider
+                      .getById(int.parse(widget.idusuario));
 
-                       ResponseApi responseApi2 = await usuarioProvider.getById(int.parse(widget.idusuario));
+                  User user = User.fromJson(responseApi2.data);
 
-                    User user = User.fromJson(responseApi2.data);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DashboardScreen(
+                                id: user.id,
+                                email: user.email,
+                                nombre: user.nombre,
+                                telefono: user.telefono,
+                                imagen: user.imagen,
+                                session_token: user.sessionToken,
+                                modelo_auto: user.modeloAuto,
+                                placa_auto: user.placaAuto,
+                                imagen_auto: user.imagenAuto,
+                                tipo_auto: user.tipoAuto,
+                              )));
 
-
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DashboardScreen(
-                                  id: user.id,
-                                  email: user.email,
-                                  nombre: user.nombre,
-                                  telefono: user.telefono,
-                                  imagen: user.imagen,
-                                  session_token: user.sessionToken,
-                                  modelo_auto: user.modeloAuto,
-                                  placa_auto: user.placaAuto,
-                                  imagen_auto: user.imagenAuto,
-                                  tipo_auto: user.tipoAuto,
-                                )));
-
-                     //Obtener todos los datos que le permiten navegar 
-                  }                
-                  else {
-                _showPaymentSuccessDialog();
-
-                    
-                  }
-
-
+                  //Obtener todos los datos que le permiten navegar
+                } else {
+                  _showPaymentSuccessDialog();
+                }
               },
             )
           ],

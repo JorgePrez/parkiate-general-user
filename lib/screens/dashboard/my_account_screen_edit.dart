@@ -272,11 +272,6 @@ class _MyAccountScreenEditState extends State<MyAccountScreenEdit> {
               ResponseApi responseApi = await usuarioAppProvider.update(
                   int.parse(widget.id), nombre, telefono, imageUrl);
               if (responseApi.success) {
-                ResponseApi responseApi = await usuarioProvider.login(
-                    'jensen@gmail.com', '579!!Oo296');
-
-                User user = User.fromJson(responseApi.data);
-
                 ResponseApi user_app_true =
                     await usuarioAppProvider.getById(int.parse(widget.id)); //○8
 
@@ -288,16 +283,6 @@ class _MyAccountScreenEditState extends State<MyAccountScreenEdit> {
 
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => DashboardScreen(
-                          id: user.id,
-                          nombre: user.nombre,
-                          telefono: user.telefono,
-                          email: user.email,
-                          imagen: user.imagen,
-                          session_token: user.sessionToken,
-                          modelo_auto: user.modeloAuto,
-                          placa_auto: user.placaAuto,
-                          imagen_auto: user.imagenAuto,
-                          tipo_auto: user.tipoAuto,
                           nombre_usuario: user2.nombre,
                           email_usuario: user2.email,
                           foto_perfil: user2.fotoPerfil,

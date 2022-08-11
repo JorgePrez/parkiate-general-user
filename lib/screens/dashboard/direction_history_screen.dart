@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:parkline/models/direccion.dart';
 import 'package:parkline/models/search_result.dart';
 import 'package:parkline/models/user.dart';
+import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/pages/mapa_page_copy.dart';
 import 'package:parkline/pages/mapa_page_ruta_dir.dart';
 import 'package:parkline/screens/dashboard_screen.dart';
@@ -18,17 +19,15 @@ class DirectionHistoryScreen extends StatefulWidget {
 
   final String id_usuario;
 
-  DirectionHistoryScreen({Key key, this.listaservicios, this.id_usuario}) : super(key: key);
+  DirectionHistoryScreen({Key key, this.listaservicios, this.id_usuario})
+      : super(key: key);
 
   @override
   _DirectionHistoryScreenState createState() => _DirectionHistoryScreenState();
 }
 
 class _DirectionHistoryScreenState extends State<DirectionHistoryScreen> {
-
-    SharedPref _sharedPref = new SharedPref();
-
-
+  SharedPref _sharedPref = new SharedPref();
 
   @override
   Widget build(BuildContext context) {
@@ -54,36 +53,20 @@ class _DirectionHistoryScreenState extends State<DirectionHistoryScreen> {
                       color: CustomColor.primaryColor,
                     ),
                     onTap: () async {
+                      UsuarioApp user_app = UsuarioApp.fromJson(
+                          await _sharedPref.read('usuario_app') ?? {});
 
-                      
-
-                          User user = User.fromJson(
-                      await _sharedPref.read('user') ?? {});
-
-        
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashboardScreen(
-                                                  id: user.id,
-                                                  email: user.email,
-                                                  nombre: user.nombre,
-                                                  telefono: user.telefono,
-                                                  imagen: user.imagen,
-                                                  session_token:
-                                                      user.sessionToken,
-                                                  modelo_auto: user.modeloAuto,
-                                                  placa_auto: user.placaAuto,
-                                                  imagen_auto: user.imagenAuto,
-                                                  tipo_auto: user.tipoAuto,
-                                                )));
-
-                                                
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => DashboardScreen(
+                                nombre_usuario: user_app.nombre,
+                                email_usuario: user_app.email,
+                                foto_perfil: user_app.fotoPerfil,
+                              )));
                     },
                   ),
                 ),
                 SizedBox(
-                  height: Dimensions.heightSize ,
+                  height: Dimensions.heightSize,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -93,14 +76,14 @@ class _DirectionHistoryScreenState extends State<DirectionHistoryScreen> {
                     'Para ver la ruta en el mapa presiona sobre la dirección',
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: Dimensions.largeTextSize ),
+                        fontSize: Dimensions.largeTextSize),
                   ),
                 ),
                 SizedBox(
-                  height: Dimensions.heightSize ,
+                  height: Dimensions.heightSize,
                 ),
 
-                  /*ListView(
+                /*ListView(
         children: [
           ListTile(
             leading: Icon(Icons.location_on),
@@ -125,92 +108,55 @@ class _DirectionHistoryScreenState extends State<DirectionHistoryScreen> {
       ),
 */
 
-      Container(
+                Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
-                     child:
-                ListView(
-                  
-        children: [
-          ListTile(
-            selectedColor: CustomColor.primaryColor,
-            selected: true,
+                  child: ListView(
+                    children: [
+                      ListTile(
+                        selectedColor: CustomColor.primaryColor,
+                        selected: true,
+                        leading: Icon(Icons.location_on),
+                        title: Text('Agregar nueva dirección'),
+                        onTap: () {
+                          //   print('Manualmebnte');
 
-            leading: Icon(Icons.location_on),
-            title: Text('Agregar nueva dirección'),
-            onTap: () {
-            //   print('Manualmebnte');
+                          SearchResult(cancelo: false, manual: true);
 
-            SearchResult(cancelo: false, manual: true);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  MapaPageCopy(id_usuario: widget.id_usuario)));
 
+                          //this.close(context, SearchResult(cancelo: false, manual: true));
+                        },
+                      ),
 
-              Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MapaPageCopy(id_usuario: widget.id_usuario)  
-                              ));
+                      SizedBox(
+                        height: Dimensions.heightSize,
+                      ),
 
+                      //TODOS LOS DEMAS LISTTILE VENDRAN DE UNA LISTA que conecta con el backend
 
-
-              
-              //this.close(context, SearchResult(cancelo: false, manual: true));
-            },
-          ),
-
-             SizedBox(
-                  height: Dimensions.heightSize ,
+                      ...widget.listaservicios
+                          .map((result) => ListTile(
+                                minVerticalPadding: 10,
+                                leading: Icon(Icons.history),
+                                title: Text(result.nombre),
+                                subtitle: Text(result.nombreDetallado),
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => MapaPageRutaDir(
+                                          latitude:
+                                              double.parse(result.latitude),
+                                          longitude:
+                                              double.parse(result.longitude))));
+                                },
+                              ))
+                          .toList()
+                    ],
+                  ),
                 ),
 
-          //TODOS LOS DEMAS LISTTILE VENDRAN DE UNA LISTA que conecta con el backend
-
-
-
-           
-
-
-
-
-
-        ...widget.listaservicios
-              .map((result) => ListTile(
-
-                   minVerticalPadding: 10,
-
-
-                    leading: Icon(Icons.history),
-                    title: Text(result.nombre),
-                    subtitle: Text(result.nombreDetallado),
-                    onTap: () {
-
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MapaPageRutaDir(
-                             
-                              latitude: double.parse(result.latitude),
-                              longitude: double.parse(result.longitude)
-                              )));
-                      
-
-
-                    },
-                  )
-                  
-                  
-                  )
-                  
-
-
-              .toList()
-
-
-         
-        ],
-
-      ),
-
-      ),
-
-     
-
-    
-       
                 /*Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,

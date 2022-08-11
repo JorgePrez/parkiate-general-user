@@ -158,11 +158,6 @@ class _ParkingCodeScreenDetailsInitState
 
                     */
 
-                ResponseApi responseApi = await usuarioProvider.login(
-                    'jensen@gmail.com', '579!!Oo296');
-
-                User user = User.fromJson(responseApi.data);
-
                 UsuarioApp user_app = UsuarioApp.fromJson(
                     await _sharedPref.read('usuario_app') ?? {});
 
@@ -173,16 +168,6 @@ class _ParkingCodeScreenDetailsInitState
 
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => DashboardScreen(
-                          id: user.id,
-                          nombre: user.nombre,
-                          telefono: user.telefono,
-                          email: user.email,
-                          imagen: user.imagen,
-                          session_token: user.sessionToken,
-                          modelo_auto: user.modeloAuto,
-                          placa_auto: user.placaAuto,
-                          imagen_auto: user.imagenAuto,
-                          tipo_auto: user.tipoAuto,
                           nombre_usuario: user_app.nombre,
                           email_usuario: user_app.email,
                           foto_perfil: user_app.fotoPerfil,

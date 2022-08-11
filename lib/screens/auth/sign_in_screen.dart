@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/providers/usuarios_app_provider.dart';
@@ -183,40 +184,22 @@ class _SignInScreenState extends State<SignInScreen> {
               String email = emailController.text.trim();
               String password = passwordController.text.trim();
 
-              ResponseApi responseApi =
-                  await usuarioProvider.login('jensen@gmail.com', '579!!Oo296');
-
-              print('Respuesta object: ${responseApi}');
-              print('RESPUESTA: ${responseApi.toJson()}');
-
               ResponseApi responseApitrue =
                   await usuarioAppProvider.login(email, password);
 
-              UsuarioApp user_app = UsuarioApp.fromJson(responseApitrue.data);
-              _sharedPref.save('usuario_app', user_app.toJson());
+              if (responseApitrue.success) {
+                UsuarioApp user_app = UsuarioApp.fromJson(responseApitrue.data);
+                _sharedPref.save('usuario_app', user_app.toJson());
 
-              if (responseApi.success) {
-                User user = User.fromJson(responseApi.data);
-                _sharedPref.save('user', user.toJson());
-
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => DashboardScreen(
-                          id: user.id,
-                          nombre: user.nombre,
-                          telefono: user.telefono,
-                          email: user.email,
-                          imagen: user.imagen,
-                          session_token: user.sessionToken,
-                          modelo_auto: user.modeloAuto,
-                          placa_auto: user.placaAuto,
-                          imagen_auto: user.imagenAuto,
-                          tipo_auto: user.tipoAuto,
                           nombre_usuario: user_app.nombre,
                           email_usuario: user_app.email,
                           foto_perfil: user_app.fotoPerfil,
                         )));
               } else {
-                NotificationsService.showSnackbar(responseApi.message);
+                return showInfoFlushbar1(
+                    context, 'Login Fallido', responseApitrue.message);
               }
             },
           ),
@@ -224,5 +207,20 @@ class _SignInScreenState extends State<SignInScreen> {
         ],
       ),
     );
+  }
+
+  void showInfoFlushbar1(
+      BuildContext context, String mensaje1, String mensaje2) {
+    Flushbar(
+      title: mensaje1,
+      message: mensaje2,
+      icon: Icon(
+        Icons.cancel_rounded,
+        size: 28,
+        color: CustomColor.redColor,
+      ),
+      leftBarIndicatorColor: CustomColor.redColor,
+      duration: Duration(seconds: 3),
+    )..show(context);
   }
 }

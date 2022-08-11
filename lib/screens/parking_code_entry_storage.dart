@@ -5,6 +5,7 @@ import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/models/visita_actual.dart';
 import 'package:parkline/providers/usuarios_app_provider.dart';
 import 'package:parkline/providers/visitas_provider.dart';
+import 'package:parkline/screens/dashboard_screen.dart';
 import 'package:parkline/screens/parking_code_screen_details2.dart';
 import 'package:parkline/screens/parking_code_screen_init.dart';
 import 'package:parkline/utils/shared_pref.dart';
@@ -26,21 +27,23 @@ import 'package:parkline/utils/custom_style.dart';
 import 'package:parkline/utils/colors.dart';
 import 'package:intl/intl.dart';
 
-class ParkingCodeScreenEntry extends StatefulWidget {
+class ParkingCodeScreenEntryStorage extends StatefulWidget {
   final String idparqueo;
   final String idusuario;
 
-  ParkingCodeScreenEntry({
+  ParkingCodeScreenEntryStorage({
     Key key,
     this.idparqueo,
     this.idusuario,
   }) : super(key: key);
 
   @override
-  _ParkingCodeScreenEntryState createState() => _ParkingCodeScreenEntryState();
+  _ParkingCodeScreenEntryStorageState createState() =>
+      _ParkingCodeScreenEntryStorageState();
 }
 
-class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
+class _ParkingCodeScreenEntryStorageState
+    extends State<ParkingCodeScreenEntryStorage> {
   @override
   Widget build(BuildContext context) {
     // final servicioService = Provider.of<ServiciosService>(context);
@@ -98,26 +101,17 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(
-                    left: Dimensions.marginSize,
-                    right: Dimensions.marginSize,
-                    top: Dimensions.marginSize),
-                child: GestureDetector(
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: CustomColor.primaryColor,
-                  ),
-                  onTap: () async {
-                    _sharedPref.removeqr();
-
-                    //      String id_parqueo_qr =
-                    //        await _sharedPref.read('id_parqueo_qr') ?? '';
-
-                    /*print(
-                        '------------------------VENIR:$id_parqueo_qr-----------');*/
-
-                    Navigator.of(context).pop();
-                  },
+                padding: const EdgeInsets.only(
+                    top: Dimensions.heightSize * 1, // 3, //1//2.5
+                    left: Dimensions //3
+                        .marginSize,
+                    right: Dimensions.marginSize),
+                child: Text(
+                  'Último código QR generado',
+                  style: TextStyle(
+                      fontSize: Dimensions.extraLargeTextSize,
+                      fontWeight: FontWeight.bold,
+                      color: CustomColor.blueColor),
                 ),
               ),
               Padding(
@@ -268,89 +262,50 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
               } else {
                 return showInfoFlushbar(context);
               }
-              //BUSCAR EL ID, si este existe va a permitir navegar sino va a mostrar el banner
+            },
+          ),
+        ),
 
-              /*   NotificationsService.showSnackbar(
-                  "TU QR PARA INICIAR NO HA SIDO ESCANEADO AÚN");*/
-              /*
+        SizedBox(height: Dimensions.heightSize * 1.5),
 
-              final ServiciosadminProvider serviciosProvider =
-                  new ServiciosadminProvider();
+        Padding(
+          padding: const EdgeInsets.only(
+              left: Dimensions.marginSize, right: Dimensions.marginSize),
+          child: GestureDetector(
+            child: Container(
+              height: 50.0,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: CustomColor.redColor,
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(Dimensions.radius * 0.5))),
+              child: Center(
+                child: Text(
+                  'Descartar e ir a Dashboard',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: Dimensions.largeTextSize,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            onTap: () async {
+              ResponseApi user_app_true = await usuarioAppProvider
+                  .getById(int.parse(widget.idusuario)); //○8
 
-              ResponseApi responseApiservicios =
-                  await serviciosProvider.getservicebool(widget.idservicio);
+              UsuarioApp user2 = UsuarioApp.fromJson(user_app_true.data);
+              _sharedPref.logout2();
 
-              Bservicios fresenias =
-                  Bservicios.fromJson(responseApiservicios.data);
+              _sharedPref.save('usuario_app', user2.toJson());
 
-              String ocupados = fresenias.servicioBool;
-              int servicioBool = int.parse(ocupados);
+              _sharedPref.removeqr();
 
-              if (servicioBool > 0) {
-                final currentTime = DateFormat.Hm().format(DateTime.now());
-
-                ResponseApi responseApi = await serviciosadminProvider.updateqr(
-                    widget.idservicio,
-                    widget.idparqueo,
-                    widget.direccion,
-                    widget.nombreparqueo,
-                    widget.imagenes,
-                    widget.idusuario,
-                    widget.nombreusuario,
-                    widget.telefono,
-                    widget.modelo_auto,
-                    widget.placa_auto,
-                    formatted,
-                    currentTime,
-                    'Por Definir',
-                    'Por Definir',
-                    widget.controlPagos);
-
-                print('RESPUESTA: ${responseApi.toJson()}');
-
-                if (responseApi.success) {
-                  //  NotificationsService.showSnackbar(responseApi.message);
-                } else {
-                  NotificationsService.showSnackbar(responseApi.message);
-                }
-
-                final authService =
-                    Provider.of<AuthService>(context, listen: false);
-
-                await authService.crearsevicio(
-                    widget.idservicio); //Guardar el id del servicio
-
-                await authService.crearubicacio(
-                    widget.latitude.toString(), widget.longitude.toString());
-
-                print("llego aqui");
-
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ParkingCodeScreen(
-                              direccion: widget.direccion,
-                              idparqueo: widget.idparqueo,
-                              imagenes: widget.imagenes,
-                              nombreparqueo: widget.nombreparqueo,
-                              idservicio: widget.idservicio,
-                              media_hora: widget.media_hora,
-                              hora: widget.hora,
-                              controlPagos: widget.controlPagos,
-                              idusuario: widget.idusuario,
-                              nombreusuario: widget.nombreusuario,
-                              telefono: widget.telefono,
-                              modelo_auto: widget.modelo_auto,
-                              placa_auto: widget.placa_auto,
-                              imagen_usuario: widget.imagen_usuario,
-                              latitude: widget.latitude,
-                              longitude: widget.longitude,
-                            )));
-              } else {
-                print("no hay ");
-                //  NotificationsService.showSnackbar("TU QR PARA INICIAR NO HA SIDO ESCANEADO AÚN");
-
-              }*/
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => DashboardScreen(
+                        nombre_usuario: user2.nombre,
+                        email_usuario: user2.email,
+                        foto_perfil: user2.fotoPerfil,
+                      )));
             },
           ),
         ),

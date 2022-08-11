@@ -76,6 +76,30 @@ Respuesta Postman
     }
   }
 
+  Future<ResponseApi> register(
+      String email, String nombre, String telefono, String password) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/register');
+      String bodyParams = json.encode({
+        'email': email,
+        'password': password,
+        'nombre': nombre,
+        'telefono': telefono
+      });
+      //<llave, valoir>
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
   Future<ResponseApi> getById(int id_usuario) async {
     try {
       Uri url = Uri.http(_url, '$_api/getuser');

@@ -1,6 +1,9 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/user.dart';
+import 'package:parkline/models/usuarios_app.dart';
+import 'package:parkline/providers/usuarios_app_provider.dart';
 import 'package:parkline/providers/usuarios_provider.dart';
 import 'package:parkline/screens/success_screen.dart';
 import 'package:parkline/utils/colors.dart';
@@ -17,6 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   UsuarioProvider usuarioProvider = new UsuarioProvider();
+  UsuarioAppProvider usuarioAppProvider = new UsuarioAppProvider();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -284,48 +288,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   telefono.isEmpty ||
                   password.isEmpty ||
                   confirmpassword.isEmpty) {
-                NotificationsService.showSnackbar(
+                return showInfoFlushbar1(context, 'Registro fallido',
                     "Debes ingresar todos los campos");
-                return;
               }
 
-              if (confirmpassword != password) {
+              /* if (confirmpassword != password) {
                 NotificationsService.showSnackbar(
                     "Las contraseñas no coinciden");
                 return;
+              }*/
+
+              if (confirmpassword != password) {
+                return showInfoFlushbar1(context, 'Registro fallido',
+                    "Las contraseñas no coinciden");
               }
 
               if (password.length < 6) {
-                NotificationsService.showSnackbar(
-                    "Las contraseñas debe tener al menos 6 caracteres");
-                return;
+                return showInfoFlushbar1(context, 'Registro fallido',
+                    "Las contraseñas deben tener al menos 6 caracteres");
               }
 
-              User user = new User(
-                  email: emailController.text.trim(),
-                  nombre: nombreController.text.trim(),
-                  telefono: telefonoController.text.trim(),
-                  imagen:
-                      'https://res.cloudinary.com/parkiate-ki/image/upload/v1637572305/profile_f9zx3b.png',
-                  password: passwordController.text.trim(),
-                  modeloAuto: "N/A",
-                  placaAuto: "N/A",
-                  imagenAuto:
-                      'https://res.cloudinary.com/parkiate-ki/image/upload/v1637573619/vehicle_rjori6.png',
-                  tipoAuto: "V");
-
-              ResponseApi responseApi = await usuarioProvider.create(user);
+              ResponseApi responseApi = await usuarioAppProvider.register(
+                  email, nombre, telefono, password);
               //${} permtie llamar metodos dentro del objeto
 
               print('RESPUESTA: ${responseApi.toJson()}');
 
               if (responseApi.success) {
-                NotificationsService.showSnackbar(responseApi.message);
+                // NotificationsService.showSnackbar(responseApi.message);
 
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => SuccessScreen()));
               } else {
-                NotificationsService.showSnackbar(responseApi.message);
+                return showInfoFlushbar1(
+                    context, 'Registro fallido', "Error en backend");
               }
             },
           ),
@@ -333,5 +329,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ],
       ),
     );
+  }
+
+  void showInfoFlushbar1(
+      BuildContext context, String mensaje1, String mensaje2) {
+    Flushbar(
+      title: mensaje1,
+      message: mensaje2,
+      icon: Icon(
+        Icons.cancel_rounded,
+        size: 28,
+        color: CustomColor.redColor,
+      ),
+      leftBarIndicatorColor: CustomColor.redColor,
+      duration: Duration(seconds: 3),
+    )..show(context);
   }
 }

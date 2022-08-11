@@ -34,6 +34,10 @@ class SharedPref {
     await remove('usuario_app');
   }
 
+  void removeqr() async {
+    await remove('id_parqueo_qr');
+  }
+
   /*Future<String> readToken() async {
     return await SharedPreferences.read(key: 'token') ?? '';
   }*/
