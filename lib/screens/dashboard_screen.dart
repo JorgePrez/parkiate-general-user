@@ -168,7 +168,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Parqueo actual [unicamente con código QR escaneado] ',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.qr_code_2_sharp),
+                  trailing: Icon(
+                    Icons.qr_code_2_sharp,
+                    color: CustomColor.primaryColor,
+                  ),
                   onTap: () async {
                     UsuarioApp user_app = UsuarioApp.fromJson(
                         await _sharedPref.read('usuario_app') ?? {});
@@ -237,7 +240,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Recientemente finalizado ',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.local_parking_outlined),
+                  trailing: Icon(
+                    Icons.local_parking_outlined,
+                    color: CustomColor.primaryColor,
+                  ),
                   onTap: () async {
                     UsuarioApp user_app = UsuarioApp.fromJson(
                         await _sharedPref.read('usuario_app') ?? {});
@@ -364,7 +370,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Historial de visitas a parqueos',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.history),
+                  trailing: Icon(
+                    Icons.history,
+                    color: CustomColor.primaryColor,
+                  ),
                   onTap: () async {
                     UsuarioApp user_app = UsuarioApp.fromJson(
                         await _sharedPref.read('usuario_app') ?? {});
@@ -393,7 +402,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Mi cuenta',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(FontAwesomeIcons.userAlt),
+                  trailing: Icon(
+                    Icons.account_circle_rounded,
+                    color: CustomColor.primaryColor,
+                  ),
                   onTap: () async {
                     UsuarioApp user_app = UsuarioApp.fromJson(
                         await _sharedPref.read('usuario_app') ?? {});
@@ -429,7 +441,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Mis vehículos',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(FontAwesomeIcons.carAlt),
+                  trailing: Icon(
+                    FontAwesomeIcons.carAlt,
+                    color: CustomColor.primaryColor,
+                  ),
                   onTap: () async {
                     UsuarioApp user_app = UsuarioApp.fromJson(
                         await _sharedPref.read('usuario_app') ?? {});
@@ -453,39 +468,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: Colors.black.withOpacity(0.4),
                   ),
                 ),
-                /* ListTile(
-                  title: Text(
-                    'Mis vehículos true',
-                    style: CustomStyle.listStyle,
-                  ),
-                  trailing: Icon(FontAwesomeIcons.carAlt),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AddVehicleScreen(
-                              id: widget.id,
-                              email: widget.email,
-                              modelo_auto: widget.modelo_auto,
-                              placa_auto: widget.placa_auto,
-                              imagen_auto: widget.imagen_auto,
-                              tipo_auto: widget.tipo_auto,
-                            )));
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.marginSize,
-                      right: Dimensions.marginSize),
-                  child: Divider(
-                    color: Colors.black.withOpacity(0.4),
-                  ),
-                ),*/
                 ListTile(
                   title: Text(
                     'Mis direcciones',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.add_location_outlined),
+                  trailing: Icon(
+                    Icons.add_location_outlined,
+                    color: CustomColor.primaryColor,
+                  ),
                   onTap: () async {
                     UsuarioApp user_app = UsuarioApp.fromJson(
                         await _sharedPref.read('usuario_app') ?? {});
@@ -518,7 +509,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     "Regresar a Dashboard",
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.person_search_outlined),
+                  trailing: Icon(
+                    Icons.person_search_outlined,
+                    color: CustomColor.primaryColor,
+                  ),
                   onTap: () {
                     Navigator.of(context).pop();
 
@@ -545,7 +539,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'CERRAR SESIÓN',
                     style: CustomStyle.listStyle,
                   ),
-                  trailing: Icon(Icons.logout),
+                  trailing: Icon(
+                    Icons.logout,
+                    color: CustomColor.primaryColor,
+                  ),
                   onTap: () async {
                     //   Navigator.pushReplacementNamed(context, 'signin');
 

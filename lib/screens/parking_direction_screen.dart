@@ -2,7 +2,11 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:parkline/models/parqueofirebase.dart';
 import 'package:parkline/models/servicioadmin.dart';
+import 'package:parkline/models/usuarios_app.dart';
+import 'package:parkline/providers/parqueos_provider.dart';
+import 'package:parkline/providers/usuarios_app_provider.dart';
 import 'package:parkline/screens/parking_code_entry.dart';
 import 'package:parkline/utils/colors.dart';
 import 'package:parkline/utils/dimensions.dart';
@@ -93,10 +97,9 @@ class _ParkingDirectionScreenState extends State<ParkingDirectionScreen> {
   }
 
   bodyWidget(BuildContext context) {
-    final ServiciosadminProvider serviciosadminProvider =
-        new ServiciosadminProvider();
-
     SharedPref _sharedPref = new SharedPref();
+    final ParqueosProvider parqueosProvider = new ParqueosProvider();
+    final UsuarioAppProvider usuarioAppProvider = new UsuarioAppProvider();
 
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
@@ -214,18 +217,32 @@ class _ParkingDirectionScreenState extends State<ParkingDirectionScreen> {
             onTap: () async {
               //guardar los datos en algun lado
 
-              _sharedPref.save('id_parqueo_qr', widget.idparqueo);
+              ResponseApi user_app_true = await usuarioAppProvider
+                  .getById(int.parse(widget.idusuario)); //○8
 
-              //    String id_parqueo_qr =
-              //       await _sharedPref.read('id_parqueo_qr') ?? '';
+              UsuarioApp user2 = UsuarioApp.fromJson(user_app_true.data);
 
-              /*  print('------------------------IR:$id_parqueo_qr-----------');*/
+              String visita_app = user2.idVisitaActual;
+
+              if ((visita_app == 'N')) {
+                _sharedPref.save('id_parqueo_qr', widget.idparqueo);
+              }
+
+              //OBTENER EL NOMBRE DEL PARQUEO
+
+              ResponseApi responseApifindparqueo =
+                  await parqueosProvider.getparkbyidfirebase(widget.idparqueo);
+
+              Parqueofirebase elparqueo =
+                  Parqueofirebase.fromJson(responseApifindparqueo.data);
 
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ParkingCodeScreenEntry(
                       //ruta intermedia
                       idparqueo: widget.idparqueo,
-                      idusuario: widget.idusuario)));
+                      idusuario: widget.idusuario,
+                      nombreparqueo: elparqueo.nombreEmpresa,
+                      idVisitaInicial: visita_app)));
             },
             child: Container(
               height: 50.0,

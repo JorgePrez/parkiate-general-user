@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:parkline/models/parqueofirebase.dart';
+import 'package:parkline/models/response_api.dart';
 import 'package:parkline/models/usuarios_app.dart';
+import 'package:parkline/providers/parqueos_provider.dart';
 import 'package:parkline/screens/parking_code_entry.dart';
 import 'package:parkline/screens/parking_code_entry_storage.dart';
 import 'package:parkline/utils/dimensions.dart';
@@ -18,6 +21,7 @@ class OnBoardScreen extends StatefulWidget {
 class _OnBoardScreenState extends State<OnBoardScreen> {
   int totalPages = OnBoardingItems.loadOnboardItem().length;
   SharedPref _sharedPref = new SharedPref();
+  final ParqueosProvider parqueosProvider = new ParqueosProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -132,13 +136,25 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                                         '';
 
                                     if (id_parqueo_qr.length > 1) {
+                                      ResponseApi responseApifindparqueo =
+                                          await parqueosProvider
+                                              .getparkbyidfirebase(
+                                                  id_parqueo_qr);
+
+                                      Parqueofirebase elparqueo =
+                                          Parqueofirebase.fromJson(
+                                              responseApifindparqueo.data);
+
                                       Navigator.of(context)
                                           .pushReplacement(MaterialPageRoute(
                                         builder: (context) =>
                                             ParkingCodeScreenEntryStorage(
-                                                //ruta intermedia
-                                                idparqueo: id_parqueo_qr,
-                                                idusuario: user_app.id),
+                                          //ruta intermedia
+                                          idparqueo: id_parqueo_qr,
+                                          idusuario: user_app.id,
+                                          nombreparqueo:
+                                              elparqueo.nombreEmpresa,
+                                        ),
                                       ));
                                     } else {
                                       Navigator.of(context).pushReplacement(

@@ -56,11 +56,11 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                       left: Dimensions.marginSize,
                       right: Dimensions.marginSize),
                   child: Text(
-                    'Para ver los detalles completos sobre tu visita presiona utiliza el botón ver detalles',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: Dimensions.largeTextSize),
-                  ),
+                      'Para ver los detalles completos sobre tu visita presiona utiliza el botón ver detalles',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: Dimensions.largeTextSize,
+                          fontWeight: FontWeight.bold)),
                 ),
                 SizedBox(
                   height: Dimensions.heightSize,
@@ -110,8 +110,9 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                             height: 150.0, //120
                             decoration: BoxDecoration(
                                 color: CustomColor.secondaryColor,
-                                border:
-                                    Border.all(color: CustomColor.primaryColor),
+                                border: Border.all(
+                                    width: 3.0,
+                                    color: CustomColor.primaryColor),
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(Dimensions.radius))),
                             child: Row(
@@ -140,27 +141,12 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                                   ),
                                 ),
                                 Expanded(
-                                  flex: 2, //
+                                  flex: 2, //2
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center, //.start
                                     children: [
-                                      Container(
-                                          height: 25, //25
-                                          width: 200, //120     //,70, //60
-                                          decoration: BoxDecoration(
-                                              color: valor
-                                                  ? Color(0xFFFFDD7A)
-                                                  : Color(0xFF8EFF9D),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(
-                                                      Dimensions.radius *
-                                                          2))), //2 //0.5
-                                          child: Center(
-                                              child: Text(valor
-                                                  ? 'Registrado'
-                                                  : 'Registrado con fotos'))),
                                       SizedBox(
                                           height: Dimensions.heightSize *
                                               0.5), //heightSize
@@ -168,7 +154,8 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                                         parkingHistory.nombreParqueo,
                                         style: TextStyle(
                                             fontSize: Dimensions.largeTextSize,
-                                            color: Colors.black),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
                                           height: Dimensions.heightSize *
@@ -179,7 +166,7 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                                         children: [
                                           Text(
                                             'Fecha de visita: $fecha',
-                                            style: CustomStyle.textStyle,
+                                            style: CustomStyle.textStylebold,
                                           ),
                                           SizedBox(
                                               height:
@@ -189,10 +176,6 @@ class _ParkingHistoryScreenFullState extends State<ParkingHistoryScreenFull> {
                                               //formato de hora  08:00-27/06/2022
 
                                               //tiempo_total: 00-00-56-41
-
-                                              /*    List<String> hora_temporal =
-                                                  parkingHistory.tiempoTotal
-                                                      .split('-');*/
 
                                               List<String> hora_temporal =
                                                   parkingHistory.tiempoTotal

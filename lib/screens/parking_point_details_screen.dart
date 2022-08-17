@@ -153,80 +153,90 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
                       SizedBox(
                         height: Dimensions.heightSize * 2,
                       ),
-                      Text(
-                        widget.name,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: Dimensions.extraLargeTextSize * 1.5),
+                      Center(
+                        child: Text(
+                          widget.name,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: Dimensions.extraLargeTextSize * 1.5),
+                        ),
                       ),
                       SizedBox(
                         height: Dimensions.heightSize * 2,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.address,
-                                  style: CustomStyle.textStyle,
-                                ),
-                                SizedBox(height: Dimensions.heightSize),
-                                Row(
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.access_time,
-                                          color: CustomColor.primaryColor,
-                                        ),
-                                        SizedBox(
-                                          width: Dimensions.widthSize,
-                                        ),
-                                        Text(
-                                          'Q ${widget.hora} hr.',
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: Dimensions.widthSize * 3,
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.space_bar,
-                                          color: CustomColor.primaryColor,
-                                        ),
-                                        SizedBox(
-                                          width: Dimensions.widthSize,
-                                        ),
-                                        Text(
-                                          '${widget.slots} esp. ',
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
+                      Center(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2, //
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start, //.start
+                                children: [
+                                  Text(
+                                    widget.address,
+                                    style: CustomStyle.textStyle,
+                                  ),
+                                  SizedBox(height: Dimensions.heightSize),
+                                  Row(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.access_time,
+                                            color: CustomColor.primaryColor,
+                                          ),
+                                          SizedBox(
+                                            width: Dimensions.widthSize,
+                                          ),
+                                          Text(
+                                            'Q ${widget.hora} hr.',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: Dimensions.widthSize * 1.5, //*3
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.space_bar,
+                                            color: CustomColor.primaryColor,
+                                          ),
+                                          SizedBox(
+                                            width: Dimensions.widthSize,
+                                          ),
+                                          Text(
+                                            '${widget.slots} esp. ',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Image.network(
-                              widget.image,
-                              width: 72,
-                              height: 67,
+                            //        SizedBox(
+                            //         width: Dimensions.widthSize * 0.5, //*3
+                            //       ),*/
+                            Expanded(
+                              flex: 2,
+                              child: Image.network(
+                                widget.image,
+                                //width: 72,
+                                height: 90, //67
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: Dimensions.heightSize * 2,
@@ -2098,7 +2108,7 @@ class _ParkingPointDetailsScreenState extends State<ParkingPointDetailsScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '${review.nombreUsuario} dijo:',
+                                        '${review.nombreUsuario}:',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize:

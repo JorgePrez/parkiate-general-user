@@ -30,12 +30,11 @@ import 'package:intl/intl.dart';
 class ParkingCodeScreenEntryStorage extends StatefulWidget {
   final String idparqueo;
   final String idusuario;
+  final String nombreparqueo;
 
-  ParkingCodeScreenEntryStorage({
-    Key key,
-    this.idparqueo,
-    this.idusuario,
-  }) : super(key: key);
+  ParkingCodeScreenEntryStorage(
+      {Key key, this.idparqueo, this.idusuario, this.nombreparqueo})
+      : super(key: key);
 
   @override
   _ParkingCodeScreenEntryStorageState createState() =>
@@ -106,12 +105,14 @@ class _ParkingCodeScreenEntryStorageState
                     left: Dimensions //3
                         .marginSize,
                     right: Dimensions.marginSize),
-                child: Text(
-                  'Último código QR generado',
-                  style: TextStyle(
-                      fontSize: Dimensions.extraLargeTextSize,
-                      fontWeight: FontWeight.bold,
-                      color: CustomColor.blueColor),
+                child: Center(
+                  child: Text(
+                    'Último código QR generado',
+                    style: TextStyle(
+                        fontSize: Dimensions.extraLargeTextSize,
+                        fontWeight: FontWeight.bold,
+                        color: CustomColor.primaryColor),
+                  ),
                 ),
               ),
               Padding(
@@ -150,7 +151,7 @@ class _ParkingCodeScreenEntryStorageState
                   ),
                 ),
               ]),
-              SizedBox(height: Dimensions.heightSize * 3),
+              SizedBox(height: Dimensions.heightSize * 1.5), //3
               GestureDetector(
                 onTap: () async {},
                 child: Center(
@@ -166,9 +167,26 @@ class _ParkingCodeScreenEntryStorageState
                   ),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.only(
-                    top: Dimensions.heightSize * 2.5,
+                    //top: Dimensions.heightSize * 1, //2.5
+                    left: Dimensions //3
+                        .marginSize,
+                    right: Dimensions.marginSize),
+                child: Center(
+                  child: Text(
+                    '${widget.nombreparqueo}',
+                    style: TextStyle(
+                        fontSize: Dimensions.largeTextSize,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: Dimensions.heightSize * 2.5, //2.5
                     left: Dimensions //3
                         .marginSize,
                     right: Dimensions.marginSize),

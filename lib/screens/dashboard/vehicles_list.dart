@@ -59,7 +59,8 @@ class _VehiclesListState extends State<VehiclesList> {
                     'Listado de los autos registrados',
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: Dimensions.extraLargeTextSize),
+                        fontSize: Dimensions.extraLargeTextSize,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
@@ -94,8 +95,9 @@ class _VehiclesListState extends State<VehiclesList> {
                             height: 150.0, //120
                             decoration: BoxDecoration(
                                 color: CustomColor.secondaryColor,
-                                border:
-                                    Border.all(color: CustomColor.primaryColor),
+                                border: Border.all(
+                                    width: 3.0,
+                                    color: CustomColor.primaryColor),
                                 borderRadius: BorderRadius.all(
                                     Radius.circular(Dimensions.radius))),
                             child: Row(
@@ -118,12 +120,12 @@ class _VehiclesListState extends State<VehiclesList> {
                                       SizedBox(
                                           height: Dimensions.heightSize *
                                               0.5), //heightSize
-                                      Text(
-                                        '   Placa : ${auto.placa}',
-                                        style: TextStyle(
-                                            fontSize: Dimensions.largeTextSize,
-                                            color: Colors.black),
-                                      ),
+                                      Text('   Placa : ${auto.placa}',
+                                          style: TextStyle(
+                                              fontSize:
+                                                  Dimensions.largeTextSize,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold)),
                                       SizedBox(
                                           height: Dimensions.heightSize *
                                               0.5), //0.5
@@ -133,7 +135,7 @@ class _VehiclesListState extends State<VehiclesList> {
                                         children: [
                                           Text(
                                             '   Registro: $fecha',
-                                            style: CustomStyle.textStyle,
+                                            style: CustomStyle.textStylebold,
                                           ),
                                         ],
                                       ),

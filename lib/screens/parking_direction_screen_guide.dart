@@ -16,8 +16,6 @@ import 'package:parkline/providers/serviciosadmin_provider.dart';
 
 import 'package:parkline/models/response_api.dart';
 
-
-
 class ParkingDirectionScreenGuide extends StatefulWidget {
   final String direccion, idparqueo, imagenes, nombreparqueo, media_hora, hora;
   final double latitude, longitude;
@@ -29,10 +27,6 @@ class ParkingDirectionScreenGuide extends StatefulWidget {
       placa_auto;
 
   final String imagen_usuario;
-
-
-  
-
 
   ParkingDirectionScreenGuide({
     Key key,
@@ -54,17 +48,12 @@ class ParkingDirectionScreenGuide extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ParkingDirectionScreenGuideState createState() => _ParkingDirectionScreenGuideState();
-
-   
- 
-
+  _ParkingDirectionScreenGuideState createState() =>
+      _ParkingDirectionScreenGuideState();
 }
 
-class _ParkingDirectionScreenGuideState extends State<ParkingDirectionScreenGuide> {
-
-  
-
+class _ParkingDirectionScreenGuideState
+    extends State<ParkingDirectionScreenGuide> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -105,19 +94,13 @@ class _ParkingDirectionScreenGuideState extends State<ParkingDirectionScreenGuid
   }
 
   bodyWidget(BuildContext context) {
-    final ServiciosadminProvider serviciosadminProvider =
-        new ServiciosadminProvider();
-
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
     final String formatted = formatter.format(now);
 
-              dynamic currentTime = DateFormat.Hm().format(DateTime.now());
+    dynamic currentTime = DateFormat.Hm().format(DateTime.now());
 
-
-     
-
-   // dynamic currentTime = DateFormat.Hm().format(DateTime.now());
+    // dynamic currentTime = DateFormat.Hm().format(DateTime.now());
 
     var random = Random.secure();
     var values = List<int>.generate(6, (i) => random.nextInt(255));
@@ -130,81 +113,6 @@ class _ParkingDirectionScreenGuideState extends State<ParkingDirectionScreenGuid
           top: Dimensions.heightSize * 2),
       child: Column(
         children: [
-         /* Text(
-            currentTime,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: Dimensions.largeTextSize * 2,
-                fontWeight: FontWeight.bold),
-          ), */
-      /*    SizedBox(
-            height: Dimensions.heightSize * 0.5,
-          ),
-      */
-         // SizedBox(height: Dimensions.heightSize),
-          
-          /* AQUI SE ENCONTRATABA ANTERIORMENTE EL GESTURE DETECTOR
-          GestureDetector(
-            onTap: () async {
-              //Rgostyrpam para recovery
-              Servicioadmin servicioadmin = new Servicioadmin(
-                idServicio: idservicio,
-                idParqueo: widget.idparqueo,
-                direccion: widget.direccion,
-                nombreParqueo: widget.nombreparqueo,
-                imagenes: widget.imagenes,
-                idUsuario: widget.idusuario,
-                nombreUsuario: widget.nombreusuario,
-                telefono: widget.telefono,
-                modeloAuto: widget.modelo_auto,
-                placaAuto: widget.placa_auto,
-                fecha: formatted,
-                horaDeentrada: currentTime,
-                horaDesalida: 'Por Definir',
-                precio: 'Por Definir',
-                parqueoControlPagos: widget.controlPagos,
-              );
-      
-              ResponseApi responseApi =
-                  await serviciosadminProvider.create(servicioadmin);
-      
-              print('RESPUESTA: ${responseApi.toJson()}');
-      
-              if (responseApi.success) {
-                //  NotificationsService.showSnackbar(responseApi.message);
-              } else {
-                NotificationsService.showSnackbar(responseApi.message);
-              }
-      
-              final authService =
-                  Provider.of<AuthService>(context, listen: false);
-      
-              await authService
-                  .crearsevicio(idservicio); //Guardar el id del servicio
-      
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ParkingCodeScreenEntry( //ruta intermedia
-                      direccion: widget.direccion,
-                      idparqueo: widget.idparqueo,
-                      imagenes: widget.imagenes,
-                      nombreparqueo: widget.nombreparqueo,
-                      idservicio: idservicio,
-                      media_hora: widget.media_hora,
-                      hora: widget.hora,
-                      controlPagos: widget.controlPagos,
-                      idusuario: widget.idusuario,
-                      nombreusuario: widget.nombreusuario,
-                      telefono: widget.telefono,
-                      modelo_auto: widget.modelo_auto,
-                      placa_auto: widget.placa_auto,
-                      imagen_usuario: widget.imagen_usuario)));
-            },
-            child: Image.asset(
-              'assets/qr-code-blue.png', //'assets/images/qrcode.png',
-              height: 200.0,
-            ),
-          ),
-          */
           Center(
             child: Text(
               //'Este QR será escaneando por un encargado del parqueo en el momento que llegues',
@@ -218,99 +126,11 @@ class _ParkingDirectionScreenGuideState extends State<ParkingDirectionScreenGuid
           SizedBox(
             height: Dimensions.heightSize * 0.5,
           ),
-      
-      /*        SizedBox(
-            height: Dimensions.heightSize * 2,
-          ),
-      */
-          /* GestureDetector( 
-            onTap: () async {
-      
-              /*
-              //Rgostyrpam para recovery
-              Servicioadmin servicioadmin = new Servicioadmin(
-                idServicio: idservicio,
-                idParqueo: widget.idparqueo,
-                direccion: widget.direccion,
-                nombreParqueo: widget.nombreparqueo,
-                imagenes: widget.imagenes,
-                idUsuario: widget.idusuario,
-                nombreUsuario: widget.nombreusuario,
-                telefono: widget.telefono,
-                modeloAuto: widget.modelo_auto,
-                placaAuto: widget.placa_auto,
-                fecha: formatted,
-                horaDeentrada: currentTime,
-                horaDesalida: 'Por Definir',
-                precio: 'Por Definir',
-                parqueoControlPagos: widget.controlPagos,
-              );
-      
-              ResponseApi responseApi =
-                  await serviciosadminProvider.create(servicioadmin);
-      
-              print('RESPUESTA: ${responseApi.toJson()}');
-      
-              if (responseApi.success) {
-                //  NotificationsService.showSnackbar(responseApi.message);
-              } else {
-                NotificationsService.showSnackbar(responseApi.message);
-              }
-      
-              final authService =
-                  Provider.of<AuthService>(context, listen: false);
-      
-              await authService
-                  .crearsevicio(idservicio); //Guardar el id del servicio*/
-      
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ParkingCodeScreenEntry( //ruta intermedia
-                      direccion: widget.direccion,
-                      idparqueo: widget.idparqueo,
-                      imagenes: widget.imagenes,
-                      nombreparqueo: widget.nombreparqueo,
-                      idservicio: idservicio,
-                      media_hora: widget.media_hora,
-                      hora: widget.hora,
-                      controlPagos: widget.controlPagos,
-                      idusuario: widget.idusuario,
-                      nombreusuario: widget.nombreusuario,
-                      telefono: widget.telefono,
-                      modelo_auto: widget.modelo_auto,
-                      placa_auto: widget.placa_auto,
-                      imagen_usuario: widget.imagen_usuario)));
-            },
-      
-              child: Container(
-                    height: 50.0,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: CustomColor.primaryColor,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(Dimensions.radius))),
-                    child: Center(
-                      child: Text(
-                        'Generar QR',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: Dimensions.largeTextSize,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-          
-          ), */
-      
-           /* SizedBox(
-            height: Dimensions.heightSize * 0.5,
-          ),*/
-      
+
           SizedBox(
             height: Dimensions.heightSize * 2,
           ),
-      
-      
-      
+
           GestureDetector(
             child: Container(
               height: 50.0,

@@ -153,10 +153,7 @@ class _ParkingCodeScreenDetailsInitState
                 ),
               ),
               onTap: () async {
-                /*guardar ubicacion 
-                    IMPORTANTE TODO: No existe el otro usuario
-
-                    */
+                _sharedPref.removeqr();
 
                 UsuarioApp user_app = UsuarioApp.fromJson(
                     await _sharedPref.read('usuario_app') ?? {});

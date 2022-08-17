@@ -1,8 +1,10 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:parkline/models/bservicios.dart';
+import 'package:parkline/models/parqueofirebase.dart';
 import 'package:parkline/models/usuarios_app.dart';
 import 'package:parkline/models/visita_actual.dart';
+import 'package:parkline/providers/parqueos_provider.dart';
 import 'package:parkline/providers/usuarios_app_provider.dart';
 import 'package:parkline/providers/visitas_provider.dart';
 import 'package:parkline/screens/parking_code_screen_details2.dart';
@@ -29,12 +31,16 @@ import 'package:intl/intl.dart';
 class ParkingCodeScreenEntry extends StatefulWidget {
   final String idparqueo;
   final String idusuario;
+  final String nombreparqueo;
+  final String idVisitaInicial;
 
-  ParkingCodeScreenEntry({
-    Key key,
-    this.idparqueo,
-    this.idusuario,
-  }) : super(key: key);
+  ParkingCodeScreenEntry(
+      {Key key,
+      this.idparqueo,
+      this.idusuario,
+      this.nombreparqueo,
+      this.idVisitaInicial})
+      : super(key: key);
 
   @override
   _ParkingCodeScreenEntryState createState() => _ParkingCodeScreenEntryState();
@@ -62,6 +68,7 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
     SharedPref _sharedPref = new SharedPref();
 
     final VisitasProvider visitasProvider = new VisitasProvider();
+    final ParqueosProvider parqueosProvider = new ParqueosProvider();
 
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('dd-MM-yyyy');
@@ -110,19 +117,13 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                   onTap: () async {
                     _sharedPref.removeqr();
 
-                    //      String id_parqueo_qr =
-                    //        await _sharedPref.read('id_parqueo_qr') ?? '';
-
-                    /*print(
-                        '------------------------VENIR:$id_parqueo_qr-----------');*/
-
                     Navigator.of(context).pop();
                   },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    top: Dimensions.heightSize * 2.5,
+                    top: Dimensions.heightSize * 1, //2.5
                     left: Dimensions //3
                         .marginSize,
                     right: Dimensions.marginSize),
@@ -156,6 +157,7 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                   ),
                 ),
               ]),
+
               SizedBox(height: Dimensions.heightSize * 3),
               GestureDetector(
                 onTap: () async {},
@@ -172,6 +174,23 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                   ),
                 ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Dimensions //3
+                        .marginSize,
+                    right: Dimensions.marginSize),
+                child: Center(
+                  child: Text(
+                    '${widget.nombreparqueo}',
+                    style: TextStyle(
+                        fontSize: Dimensions.largeTextSize,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                ),
+              ),
+
               Padding(
                 padding: const EdgeInsets.only(
                     top: Dimensions.heightSize * 2.5,
@@ -226,11 +245,21 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
 
               print(user2.toJson());
 
-              String visita_app = user2.idVisitaActual;
+              String visita_actualizada = user2.idVisitaActual;
 
-              if (!(visita_app == 'N')) {
-                Visitactual visita_actual =
-                    await visitasProvider.getById(user_app.id, visita_app);
+              if ((visita_actualizada == 'N') &&
+                  (widget.idVisitaInicial == 'N')) {
+                return showInfoFlushbar1(
+                  context,
+                  'Tu QR aún no ha sido escaneado o es inválido',
+                  'Para registrar tu visita a este parqueo tú código debe ser escaneado',
+                );
+              } else if ((visita_actualizada != 'N') &&
+                  (widget.idVisitaInicial == 'N')) {
+                //procesamientos
+
+                Visitactual visita_actual = await visitasProvider.getById(
+                    user_app.id, visita_actualizada);
 
                 print('Usuario_app: ${visita_actual.toJson()}');
 
@@ -266,91 +295,18 @@ class _ParkingCodeScreenEntryState extends State<ParkingCodeScreenEntry> {
                             latitude: visita_actual.latitude,
                             longitude: visita_actual.longitude)));
               } else {
-                return showInfoFlushbar(context);
+                ResponseApi responseApifindparqueo =
+                    await parqueosProvider.actual_visita(visita_actualizada);
+
+                Parqueofirebase elparqueo =
+                    Parqueofirebase.fromJson(responseApifindparqueo.data);
+
+                return showInfoFlushbar1(
+                  context,
+                  'QR inválido: (Auto en algún parqueo)',
+                  'Parqueo en uso:"${elparqueo.nombreEmpresa}"',
+                );
               }
-              //BUSCAR EL ID, si este existe va a permitir navegar sino va a mostrar el banner
-
-              /*   NotificationsService.showSnackbar(
-                  "TU QR PARA INICIAR NO HA SIDO ESCANEADO AÚN");*/
-              /*
-
-              final ServiciosadminProvider serviciosProvider =
-                  new ServiciosadminProvider();
-
-              ResponseApi responseApiservicios =
-                  await serviciosProvider.getservicebool(widget.idservicio);
-
-              Bservicios fresenias =
-                  Bservicios.fromJson(responseApiservicios.data);
-
-              String ocupados = fresenias.servicioBool;
-              int servicioBool = int.parse(ocupados);
-
-              if (servicioBool > 0) {
-                final currentTime = DateFormat.Hm().format(DateTime.now());
-
-                ResponseApi responseApi = await serviciosadminProvider.updateqr(
-                    widget.idservicio,
-                    widget.idparqueo,
-                    widget.direccion,
-                    widget.nombreparqueo,
-                    widget.imagenes,
-                    widget.idusuario,
-                    widget.nombreusuario,
-                    widget.telefono,
-                    widget.modelo_auto,
-                    widget.placa_auto,
-                    formatted,
-                    currentTime,
-                    'Por Definir',
-                    'Por Definir',
-                    widget.controlPagos);
-
-                print('RESPUESTA: ${responseApi.toJson()}');
-
-                if (responseApi.success) {
-                  //  NotificationsService.showSnackbar(responseApi.message);
-                } else {
-                  NotificationsService.showSnackbar(responseApi.message);
-                }
-
-                final authService =
-                    Provider.of<AuthService>(context, listen: false);
-
-                await authService.crearsevicio(
-                    widget.idservicio); //Guardar el id del servicio
-
-                await authService.crearubicacio(
-                    widget.latitude.toString(), widget.longitude.toString());
-
-                print("llego aqui");
-
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ParkingCodeScreen(
-                              direccion: widget.direccion,
-                              idparqueo: widget.idparqueo,
-                              imagenes: widget.imagenes,
-                              nombreparqueo: widget.nombreparqueo,
-                              idservicio: widget.idservicio,
-                              media_hora: widget.media_hora,
-                              hora: widget.hora,
-                              controlPagos: widget.controlPagos,
-                              idusuario: widget.idusuario,
-                              nombreusuario: widget.nombreusuario,
-                              telefono: widget.telefono,
-                              modelo_auto: widget.modelo_auto,
-                              placa_auto: widget.placa_auto,
-                              imagen_usuario: widget.imagen_usuario,
-                              latitude: widget.latitude,
-                              longitude: widget.longitude,
-                            )));
-              } else {
-                print("no hay ");
-                //  NotificationsService.showSnackbar("TU QR PARA INICIAR NO HA SIDO ESCANEADO AÚN");
-
-              }*/
             },
           ),
         ),
@@ -366,6 +322,20 @@ void showInfoFlushbar(BuildContext context) {
     title: 'Tu código aún no ha sido escaneado',
     message:
         'Para avanzar a la siguiente pantalla tú código debe ser escaneado',
+    icon: Icon(
+      Icons.info_outline,
+      size: 28,
+      color: Colors.blue.shade300,
+    ),
+    leftBarIndicatorColor: Colors.blue.shade300,
+    duration: Duration(seconds: 3),
+  )..show(context);
+}
+
+void showInfoFlushbar1(BuildContext context, String mensaje1, String mensaje2) {
+  Flushbar(
+    title: mensaje1,
+    message: mensaje2,
     icon: Icon(
       Icons.info_outline,
       size: 28,
