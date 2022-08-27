@@ -16,40 +16,26 @@ class ParqueosProvider {
     this.context = context;
   }
 
-
   // Obteniendo todos los parqueos
 
-
   Future<List<Parqueo>> loadParqueos() async {
-  
+    try {
+      Uri url = Uri.http(_url, '$_api/getAll');
 
- try {
-          Uri url = Uri.http(_url, '$_api/getAll');
+      final resp = await http.get(url);
 
-
-   
-    final resp = await http.get(url);
-
-       final data = json.decode(resp.body);
+      final data = json.decode(resp.body);
       print(data);
-
 
       Parqueo parqueo = Parqueo.fromJsonList(data);
       print(parqueo.toList);
 
-        return parqueo.toList;
+      return parqueo.toList;
     } catch (e) {
       print('Error: $e');
       return [];
     }
-
-
   }
-    
-   
-
-   
-
 
   // Obtener en base a keyword (busqueda de parqueo)
   Future<List<Parqueo>> buscar(String akeyword) async {
@@ -118,13 +104,35 @@ class ParqueosProvider {
     }
   }
 
-    Future<ResponseApi> getreviews(String id_parqueo, String nombre_usuario) async {
+  Future<ResponseApi> getreviews(
+      String id_parqueo, String nombre_usuario) async {
     try {
       Uri url = Uri.http(_url, '$_api/reviews');
 
+      String bodyParams = json
+          .encode({'id_parqueo': id_parqueo, 'nombre_usuario': nombre_usuario});
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
+  //Obtener informacion del parqueo con id de Firebase
+
+  Future<ResponseApi> getparkbyidfirebase(String id_parqueo) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/findfullpark');
+
       String bodyParams = json.encode({
         'id_parqueo': id_parqueo,
-        'nombre_usuario': nombre_usuario
       });
 
       Map<String, String> headers = {'Content-type': 'application/json'};
@@ -140,5 +148,24 @@ class ParqueosProvider {
     }
   }
 
+  Future<ResponseApi> actual_visita(String id_entrada_salida) async {
+    try {
+      Uri url = Uri.http(_url, '$_api/findvisita');
 
+      String bodyParams = json.encode({
+        'id_entrada_salida': id_entrada_salida,
+      });
+
+      Map<String, String> headers = {'Content-type': 'application/json'};
+
+      final res = await http.post(url, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
 }
